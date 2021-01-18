@@ -1,0 +1,26 @@
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/action_inicio"
+        android:enabled="true"
+        android:icon="@drawable/schedule"
+        android:title="Agenda"/>
+
+    <item
+        android:id="@+id/action_posibles"
+        android:enabled="true"
+        android:icon="@drawable/nuevo"
+        android:title="Propuestas"/>
+
+    <item
+
+        android:id="@+id/action_promises"
+        android:enabled="true"
+        android:icon="@drawable/promised"
+        android:title="Promesas"/>
+
+
+
+
+</menu>

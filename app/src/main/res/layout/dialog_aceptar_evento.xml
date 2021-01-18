@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+
+    android:backgroundTint="@color/colorBlanco"
+    app:cardCornerRadius="16dp"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/cabecera"
+        >
+
+        <LinearLayout
+            android:id="@+id/btnMasInformacion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+
+            >
+
+            <TextView
+                android:id="@+id/AceptarEventoDialog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="8dp"
+                android:layout_weight="1"
+
+                android:gravity="left"
+                android:textColor="@color/colorBlanco"
+                android:text="Desea aceptar el evento?"
+                android:textSize="18dp" />
+
+            <ImageView
+                android:id="@+id/ImgBorrar"
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="16dp"
+                app:srcCompat="@drawable/eliminar"
+                />
+
+            <ImageView
+                android:id="@+id/ImgEditar"
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="16dp"
+                app:srcCompat="@drawable/editar"
+                />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="16dp"
+            android:weightSum="2"
+
+
+            >
+            <Button
+                android:id="@+id/BtnCancelarDialogAceptarEvento"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Cancelar"
+                android:backgroundTint="@color/colorBlanco"
+                android:textColor="@color/cabecera"
+
+                />
+            <Button
+                android:id="@+id/BtnAceptarDialogAceptarEvento"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Aceptar"
+                android:backgroundTint="@color/cabecera"
+                android:textColor="@color/colorBlanco"
+
+                />
+        </LinearLayout>
+
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

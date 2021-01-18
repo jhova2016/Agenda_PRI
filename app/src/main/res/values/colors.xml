@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#B12027</color>
+    <color name="colorPrimaryDark">#640005</color>
+    <color name="colorAccent">#000000</color>
+
+    <color name="color1">#03588C</color>
+    <color name="color2">#0388A6</color>
+    <color name="color2T">#2F0388A6</color>
+    <color name="color3">#006319</color>
+    <color name="color4">#83A603</color>
+    <color name="color5">#C0D904</color>
+    <color name="colorNegro">#000000</color>
+    <color name="colorBlanco">#FFFFFF</color>
+    <color name="colorGris">#F1F1F1</color>
+    <color name="colorGris2">#3A3A3A</color>
+
+    <color name="colorPublico1">#F2E085</color>
+    <color name="colorPublico2">#2AF2E085</color>
+
+
+
+    <color name="cabecera">#B0121A</color>
+    <color name="pie">#B12027</color>
+    <color name="pie2">#FD4750</color>
+    <color name="hint">#6E6E6E</color>
+
+    <color name="ColorSchedulle">#D97904</color>
+    <color name="ColorSchedulleComplement">#FFB01F</color>
+    <color name="ColorProposed">#404040</color>
+    <color name="ColorPromises">#009EAB</color>
+
+    <color name="Transparente">#00FFFFFF</color>
+
+
+    <color name="ColorPromises2">#515A62</color>
+    <color name="ColorPromises3">#D6A340</color>
+    <color name="ColorPromises4">#AFB2C0</color>
+
+
+    <color name="Gris"> #E7E7E7</color>
+
+    <color name="BlancoTransparente">#31FFFFFF</color>
+    <color name="NegroTransparente">#A4000000</color>
+
+
+
+
+
+
+
+
+</resources>

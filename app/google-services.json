@@ -1,0 +1,77 @@
+{
+  "project_info": {
+    "project_number": "629847420688",
+    "firebase_url": "https://mensajeria-e2c7f.firebaseio.com",
+    "project_id": "mensajeria-e2c7f",
+    "storage_bucket": "mensajeria-e2c7f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:629847420688:android:25874a3275f6f8994bff95",
+        "android_client_info": {
+          "package_name": "com.example.agenda_pri"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "629847420688-q4uimom2589hcoge8nsiqs14fors7rc7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBR-w7XVcQm8iaFtNYTllpdm2s5VNyL1k4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "629847420688-q4uimom2589hcoge8nsiqs14fors7rc7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:629847420688:android:39b3c961eddc760b4bff95",
+        "android_client_info": {
+          "package_name": "com.example.encripacionpacifico"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "629847420688-7qflf46dq6lp1sorvfhejaso88enb5cr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.encripacionpacifico",
+            "certificate_hash": "e645e620348769371c32a3f424e7df36b22254c8"
+          }
+        },
+        {
+          "client_id": "629847420688-q4uimom2589hcoge8nsiqs14fors7rc7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBR-w7XVcQm8iaFtNYTllpdm2s5VNyL1k4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "629847420688-q4uimom2589hcoge8nsiqs14fors7rc7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

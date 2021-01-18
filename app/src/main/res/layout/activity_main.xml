@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    xmlns:design="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorPrimaryDark"
+    tools:context=".UI.MainActivity">
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/colorPrimaryDark"
+        android:gravity="center"
+
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="6dp"
+
+            >
+
+            <TextView
+
+                android:id="@+id/Titulo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="@color/colorBlanco"
+                android:textSize="24dp"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:layout_marginLeft="18dp"
+                />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:orientation="vertical"
+                android:layout_marginRight="12dp"
+                >
+
+                <TextView
+
+                    android:id="@+id/Identificador"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:textColor="@color/colorBlanco"
+                    android:textSize="12dp"
+
+
+                    />
+                <TextView
+
+                    android:id="@+id/Correo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:textColor="@color/pie2"
+                    android:textSize="10dp"
+                    android:maxLines="1"
+                    android:maxLength="15"
+                    android:ellipsize="end"
+
+
+                    />
+
+            </LinearLayout>
+
+
+
+            <ImageView
+                android:id="@+id/ImageBtnOpciones"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+               android:layout_marginRight="18dp"
+                design:srcCompat="@drawable/opciones" />
+
+
+        </LinearLayout>
+
+
+
+
+    </LinearLayout>
+
+
+
+
+
+    <FrameLayout
+        android:id="@+id/main_fragment_placeholder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/floatingActionButton"
+            android:layout_width="113dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="16dp"
+            android:backgroundTint="@color/color3"
+            android:clickable="true"
+            android:visibility="invisible"
+            app:elevation="5dp"
+            app:borderWidth="0dp"
+            design:srcCompat="@drawable/nuevo" />
+
+    </FrameLayout>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        design:menu="@menu/navigation_menu"
+        android:background="@color/colorPrimaryDark"
+        design:itemIconTint="@color/menucolors"
+        design:itemTextColor="@color/menucolors"
+        >
+
+
+
+    </com.google.android.material.bottomnavigation.BottomNavigationView>
+
+</LinearLayout>

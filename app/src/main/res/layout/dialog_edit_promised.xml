@@ -1,0 +1,244 @@
+<androidx.cardview.widget.CardView android:layout_width="match_parent"
+    android:id="@+id/card"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="16dp"
+    android:layout_margin="6dp"
+    app:cardBackgroundColor="@color/Transparente"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:id="@+id/ColorTarjeta"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/Gris"
+
+        >
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+
+            <LinearLayout
+                android:id="@+id/ColorTarjetaCabecera"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@color/Gris"
+                android:gravity="center"
+
+
+
+                >
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="20dp"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/localidad"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="12dp"
+                    android:layout_marginTop="2dp"
+
+                    />
+
+                <TextView
+                    android:id="@+id/Localidad"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Localidad"
+                    android:textColor="@color/ColorPromises2"
+                    android:textSize="14dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+
+
+                    />
+
+                <ImageView
+                    android:id="@+id/eliminarpromesa"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="12dp"
+                    app:srcCompat="@drawable/eliminar" />
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+
+
+
+                >
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginTop="6dp"
+
+
+                    >
+
+                    <ImageView
+                        android:id="@+id/imageView4"
+                        android:layout_width="20dp"
+                        android:layout_height="wrap_content"
+
+                        app:srcCompat="@drawable/fecha" />
+
+                    <TextView
+                        android:id="@+id/Fecha"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Fecha"
+                        android:textSize="14dp"
+                        android:textColor="@color/colorNegro"
+                        android:gravity="center_vertical"
+
+
+
+                        />
+
+                    <TextView
+                        android:id="@+id/EstatePromised"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="prometido"
+                        android:textColor="@color/ColorPromises2"
+                        android:textSize="10dp"
+                        android:gravity="center"
+                        android:layout_marginLeft="30dp"
+
+                        />
+
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/ColorTipo2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+
+
+                >
+
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="lugar"
+                    android:textColor="@color/colorGris2"
+                    android:textSize="9dp"
+                    android:gravity="center_vertical"
+                    android:layout_marginLeft="12dp"/>
+                <TextView
+                    android:id="@+id/Lugar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Lugar"
+                    android:textColor="@color/colorNegro"
+                    android:textSize="14dp"
+                    android:gravity="center_vertical"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="12dp"
+
+                    />
+
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Promesa"
+                    android:textColor="@color/colorGris2"
+                    android:textSize="9dp"
+                    android:gravity="center_vertical"
+                    android:layout_marginLeft="12dp"/>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    app:cardCornerRadius="16dp"
+                    android:layout_margin="12dp"
+                    app:cardElevation="5dp"
+                    app:cardBackgroundColor="@color/colorBlanco"
+
+
+                    >
+                    <EditText
+                        android:id="@+id/EditPromised"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="textMultiLine"
+                        android:gravity="start|top"
+                        android:textColor="@color/colorNegro"
+                        android:hint="promesa" />
+
+
+
+                </androidx.cardview.widget.CardView>
+
+                    />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_margin="16dp"
+                android:weightSum="2"
+                android:layout_weight="1"
+                android:gravity="center"
+
+
+                >
+
+                <Button
+                    android:id="@+id/Close"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Cancelar"
+                    android:backgroundTint="@color/colorBlanco"
+                    android:textColor="@color/color2"
+
+
+                    />
+
+                <Button
+                    android:id="@+id/Save"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Guardar"
+                    android:backgroundTint="@color/color2"
+                    android:textColor="@color/colorBlanco"
+
+
+                    />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+
+
+</androidx.cardview.widget.CardView>

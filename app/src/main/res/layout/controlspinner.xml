@@ -1,0 +1,10 @@
+<TextView android:id="@+id/textView2"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="TextView"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:textSize="12dp"
+    android:padding="10dp"
+    android:textColor="@color/colorBlanco"
+
+    />

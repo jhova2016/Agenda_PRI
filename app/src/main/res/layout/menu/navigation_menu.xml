@@ -1,0 +1,30 @@
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_generar"
+        android:enabled="true"
+        android:icon="@drawable/generardocumento"
+        android:title="generar"/>
+    <item
+        android:id="@+id/action_sincronizar"
+        android:enabled="true"
+        android:icon="@drawable/sincronizar"
+        android:title="sincronizar"/>
+
+    <item
+        android:id="@+id/action_inicio"
+        android:enabled="true"
+        android:icon="@drawable/casa"
+        android:title="inicio"/>
+    <item
+        android:id="@+id/action_agregar_usuario"
+        android:enabled="true"
+        android:icon="@drawable/agregarusuario"
+        android:title="usuario"/>
+    <item
+        android:id="@+id/action_agregar_calle"
+        android:enabled="true"
+        android:icon="@drawable/agregarcalle"
+        android:title="calles"/>
+
+</menu>
