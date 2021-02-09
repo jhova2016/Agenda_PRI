@@ -1,0 +1,24 @@
+<androidx.cardview.widget.CardView android:layout_width="match_parent"
+    android:id="@+id/card"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="16dp"
+    android:layout_margin="6dp"
+    app:cardBackgroundColor="@color/colorBlanco"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <TextView
+        android:id="@+id/Mail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Mail"
+        android:textSize="12dp"
+        android:textColor="@color/colorNegro"
+        android:gravity="center"
+        android:layout_margin="16dp"
+        />
+
+
+
+</androidx.cardview.widget.CardView>

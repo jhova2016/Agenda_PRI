@@ -30,6 +30,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -38,6 +39,8 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.agenda_pri.Models.AdapterAgenda;
+import com.example.agenda_pri.Models.AdapterMail;
+import com.example.agenda_pri.Models.AdapterSchedulleLitle;
 import com.example.agenda_pri.Models.Elemento_Evento;
 import com.example.agenda_pri.R;
 import com.example.agenda_pri.UI.Login.SingIN;
@@ -71,6 +74,7 @@ import java.util.Map;
 import static android.content.ContentValues.TAG;
 import static android.content.Context.MODE_PRIVATE;
 import static com.example.agenda_pri.R.id.LayoutProgressBar;
+import static com.example.agenda_pri.R.id.Mail;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -82,12 +86,15 @@ public class Principal extends Fragment {
     RecyclerView listaEventos;
     AdapterAgenda adapterAgenda;
 
+    ArrayList<String> ListLastEvents = new ArrayList<String>();
+
     final ArrayList<Elemento_Evento> Evento = new ArrayList<Elemento_Evento>();
     AlertDialog DialogEvento;
     AlertDialog DialogEliminarEvento;
     AlertDialog DialogEditarEventoFuncion;
     AlertDialog DialogAceptarEditar;
     AlertDialog DialogNewEvent;
+    AlertDialog DialogChamgleMail;
 
     AlertDialog  Dialog_save_Schedulle;
 
@@ -100,7 +107,7 @@ public class Principal extends Fragment {
     LinearLayout FiltroFecha;
     TextView TextoFiltroFecha;
 
-    FloatingActionButton CancelDateFilter;
+    ImageButton CancelDateFilter;
 
     FloatingActionButton BotonFlotante;
 
@@ -135,6 +142,10 @@ public class Principal extends Fragment {
 
 
 
+    RecyclerView RecyclerLastEvents;
+    AdapterMail AdapterLastSchedulle;
+
+    TextView ChamgleMail;
     //end val of dialognewevent
 
     // TODO: Rename parameter arguments, choose names that match
@@ -172,8 +183,10 @@ public class Principal extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        mAuth = FirebaseAuth.getInstance();
         sharedPreferences = getContext().getSharedPreferences("ADMINISTRADORES", MODE_PRIVATE);
+
+
 
         //
         FillElements("all");
@@ -185,8 +198,8 @@ public class Principal extends Fragment {
 
     public void FillElements(String DatefilterDate)
     {
-
-        if(sharedPreferences.getInt("ADMIN", 1)==1)
+        Recycler(DatefilterDate);
+        /*if(sharedPreferences.getInt("ADMIN", 1)==1)
         {
             //si es admin
             RecyclerADMI(DatefilterDate);
@@ -194,7 +207,7 @@ public class Principal extends Fragment {
         {
             //si es admin
             RecyclerNOADMI(DatefilterDate);
-        }
+        }*/
 
 
     }
@@ -229,7 +242,9 @@ public class Principal extends Fragment {
             @Override
             public void onClick(View v) {
 
-                DocumentReference washingtonRef = db.collection("Eventos").document(ID);
+
+
+                DocumentReference washingtonRef = db.collection("Users").document(mAuth.getUid()).collection("Eventos").document(ID);
 
                 washingtonRef
                         .update("TipoDeEvento",  TipoDeEventoEditarEvento,
@@ -326,7 +341,8 @@ public class Principal extends Fragment {
             @Override
             public void onClick(View v) {
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
-                DocumentReference docRef = db.collection("Eventos").document(EntId);
+
+                DocumentReference docRef = db.collection("Users").document(mAuth.getUid()).collection("Eventos").document(EntId);
                 docRef.delete();
 
                 SimpleDateFormat objSDFQuitar  = new SimpleDateFormat("HH:mm:ss");
@@ -428,10 +444,14 @@ public class Principal extends Fragment {
             public void onClick(View v) {
 
 
+                final String Aux=sharedPreferences.getString("SchedulleUser", mAuth.getCurrentUser().getEmail());
+
+
 
 
                 final FirebaseFirestore db = FirebaseFirestore.getInstance();
-                db.collection("DiasBloqueados")
+                db.collection("Users").document(Aux).collection("DiasBloqueados")
+                //db.collection("DiasBloqueados")
                         .get()
                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
 
@@ -517,7 +537,10 @@ public class Principal extends Fragment {
                                                     Evento.put("QuienCalendarizo",      QuienCalendarizo);
 
                                                     FirebaseFirestore db = FirebaseFirestore.getInstance();
-                                                    db.collection("Eventos")
+                                                    ///
+
+                                                    db.collection("Users").document(Aux).collection("Eventos")
+                                                    //db.collection("Eventos")
                                                             .add(Evento)
                                                             .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                                                 @Override
@@ -533,7 +556,8 @@ public class Principal extends Fragment {
                                                                     Hora.put("UltimaActualizacion",  objSDFQuitar .format(date));
 
                                                                     FirebaseFirestore db2 = FirebaseFirestore.getInstance();
-                                                                    db2.collection("Actualizar").document("Bandera")
+
+                                                                    db2.collection("Users").document(Aux).collection("Actualizar").document("Bandera")
                                                                             .set(Hora)
                                                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                                                 @Override
@@ -558,7 +582,7 @@ public class Principal extends Fragment {
                                                                     NuevaInfoDeNotificacion.put("UltimaActualizacion",  objSDFQuitar .format(date));
 
 
-                                                                    db2.collection("Actualizar").document("NuevoEventoPropuesto")
+                                                                    db2.collection("Users").document(Aux).collection("Actualizar").document("NuevoEventoPropuesto")
                                                                             .set(NuevaInfoDeNotificacion)
                                                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                                                 @Override
@@ -640,8 +664,11 @@ public class Principal extends Fragment {
                                                     Evento.put("FechaDeCalendarizacion",FechaDeCalendarizacion);
                                                     Evento.put("QuienCalendarizo",      QuienCalendarizo);
 
+
+                                                    ///
                                                     FirebaseFirestore db = FirebaseFirestore.getInstance();
-                                                    db.collection("Eventos")
+                                                    db.collection("Users").document(Aux).collection("Eventos")
+                                                    //db.collection("Eventos")
                                                             .add(Evento)
                                                             .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                                                 @Override
@@ -657,7 +684,7 @@ public class Principal extends Fragment {
                                                                     Hora.put("UltimaActualizacion",  objSDFQuitar .format(date));
 
                                                                     FirebaseFirestore db2 = FirebaseFirestore.getInstance();
-                                                                    db2.collection("Actualizar").document("Bandera")
+                                                                   db2.collection("Users").document(Aux).collection("Actualizar").document("Bandera")
                                                                             .set(Hora)
                                                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                                                 @Override
@@ -682,7 +709,7 @@ public class Principal extends Fragment {
                                                                     NuevaInfoDeNotificacion.put("UltimaActualizacion",  objSDFQuitar .format(date));
 
 
-                                                                    db2.collection("Actualizar").document("NuevoEventoPropuesto")
+                                                                   /* db2.collection("Actualizar").document("NuevoEventoPropuesto")
                                                                             .set(NuevaInfoDeNotificacion)
                                                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                                                 @Override
@@ -695,7 +722,7 @@ public class Principal extends Fragment {
                                                                                 public void onFailure(@NonNull Exception e) {
                                                                                     Log.w(TAG, "Error writing document", e);
                                                                                 }
-                                                                            });
+                                                                            });*/
 
 
                                                                     Toast.makeText(getContext(), "Evento agendado", Toast.LENGTH_LONG).show();
@@ -1160,11 +1187,11 @@ public class Principal extends Fragment {
 
     public void RecyclerADMI(final String DateFilter)
     {
-
-
-
+        Evento.clear();
+        final String Aux=sharedPreferences.getString("SchedulleUser", mAuth.getCurrentUser().getEmail());
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference docRef = db.collection("Actualizar").document("Bandera");
+
+        DocumentReference docRef = db.collection("Users").document(Aux).collection("Actualizar").document("Bandera");
 
         docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
@@ -1173,8 +1200,11 @@ public class Principal extends Fragment {
 
                 Evento.clear();
 
+
+
                 final FirebaseFirestore db = FirebaseFirestore.getInstance();
-                db.collection("Eventos")
+                db.collection("Users").document(Aux).collection("Eventos")
+                //db.collection("Eventos")
                         .get()
                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
 
@@ -1225,11 +1255,6 @@ public class Principal extends Fragment {
                                                                 document.get("FechaDeCalendarizacion").toString(),
                                                                 document.get("QuienCalendarizo").toString() ));
                                                         //adapterAgenda.notifyDataSetChanged();
-
-
-
-
-
 
                                                 }
                                                 else
@@ -1307,7 +1332,8 @@ public class Principal extends Fragment {
 
                 Evento.clear();
                 final FirebaseFirestore db = FirebaseFirestore.getInstance();
-                db.collection("Eventos")
+                db.collection("Users").document(mAuth.getUid()).collection("Eventos")
+                //db.collection("Eventos")
                         .get()
                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
 
@@ -1459,6 +1485,129 @@ public class Principal extends Fragment {
 
     }
 
+    public void Recycler(final String DateFilter)
+    {
+        Evento.clear();
+        final String Aux=sharedPreferences.getString("SchedulleUser", mAuth.getCurrentUser().getEmail());
+        final FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+
+                db.collection("Users").document(Aux).collection("Eventos")
+                        //db.collection("Eventos")
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                        Log.d(TAG, document.getId() + " => " + document.getData());
+
+                                        SimpleDateFormat objSDFQuitar  = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+                                        if(document.get("EstadoDeEvento").toString().equals("Futuro"))
+                                        {
+
+                                            try {
+
+                                                Date dtEvento  = objSDFQuitar.parse( document.get("FechaDeEvento").toString()+" "+document.get("HoraFinal").toString());
+                                                Date date = new Date();
+                                                System.out.println("Hora y fecha actual: "+objSDFQuitar .format(date));
+                                                if (dtEvento.compareTo(date)>0) {
+
+                                                    SimpleDateFormat formatoviejo  = new SimpleDateFormat("dd/MM/yyyy");
+
+                                                    final String NEW_FORMAT = "EEEE d";
+
+                                                    String newDateString;
+
+
+                                                    Date d = formatoviejo.parse(document.get("FechaDeEvento").toString());
+                                                    formatoviejo.applyPattern(NEW_FORMAT);
+                                                    newDateString = formatoviejo.format(d);
+
+
+                                                    Evento.add(new Elemento_Evento(
+                                                            document.getId(),
+                                                            document.get("TipoDeEvento").toString(),
+                                                            document.get("Localidad").toString(),
+                                                            document.get("Lugar").toString(),
+                                                            document.get("Informacion").toString(),
+                                                            document.get("FechaDeEvento").toString(),
+                                                            newDateString,
+                                                            document.get("HoraInicio").toString(),
+                                                            document.get("HoraFinal").toString(),
+                                                            document.get("Responsable").toString(),
+                                                            document.get("Vestimenta").toString(),
+                                                            document.get("EstadoDeEvento").toString(),
+                                                            document.get("CoordenadasActuales").toString(),
+                                                            document.get("CoordenadasEvento").toString(),
+                                                            document.get("FechaDeCalendarizacion").toString(),
+                                                            document.get("QuienCalendarizo").toString() ));
+                                                    //adapterAgenda.notifyDataSetChanged();
+
+                                                }
+                                                else
+                                                {
+                                                    System.out.println("ya paso");
+                                                }
+
+
+                                            } catch (ParseException e) {
+                                                e.printStackTrace();
+                                            }
+
+
+                                        }
+
+
+                                    }
+
+                                    SimpleDateFormat objSDF  = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+                                    for(int i = 0; i < Evento.size() - 1; i++)
+                                    {
+
+                                        for(int j = 0; j < Evento.size()  - 1; j++)
+                                        {
+                                            Date dt_1 = null;
+                                            Date dt_2 = null;
+                                            try {
+
+                                                dt_1 = objSDF.parse(Evento.get(j).getFechaDeEvento()+" "+Evento.get(j).getHoraInicio());
+                                                dt_2 = objSDF.parse(Evento.get(j+1).getFechaDeEvento()+" "+Evento.get(j+1).getHoraInicio());
+                                            } catch (ParseException e) {
+                                                e.printStackTrace();
+                                            }
+                                            //System.out.println("Date1:" + objSDF.format(dt_1));
+                                            //System.out.println("Date2:" + objSDF.format(dt_2));
+
+                                            if (dt_1.compareTo(dt_2)==1) {
+
+                                                Elemento_Evento tmp=Evento .get(j+1);
+                                                Evento.set(j+1,Evento.get(j));
+                                                Evento.set(j,tmp);
+
+
+                                            }
+
+                                        }
+                                    }
+
+
+                                    //adapterAgenda.notifyDataSetChanged();
+                                    FillRecycler(DateFilter);
+
+                                } else {
+                                    Log.w(TAG, "Error getting documents.", task.getException());
+                                }
+                            }
+                        });
+
+
+
+
+
+    }
+
     public void FillRecycler(String DateFilter)
     {
         LayoutProgressBar.setVisibility(View.VISIBLE);
@@ -1569,12 +1718,11 @@ public class Principal extends Fragment {
         // Inflate the layout for this fragment
         final View view=inflater.inflate(R.layout.fragment_principal, container, false);
 
-
         sharedPreferences = getContext().getSharedPreferences("ADMINISTRADORES", MODE_PRIVATE);
 
         BotonFlotante=view.findViewById(R.id.FloatingCreateEvent);
         CancelDateFilter=view.findViewById(R.id.floatingActionButtonCancelFilter);
-        CancelDateFilter.hide();
+        CancelDateFilter.setVisibility(View.INVISIBLE);
 
         LayoutProgressBar=view.findViewById(R.id.LayoutProgressBar);
 
@@ -1585,16 +1733,28 @@ public class Principal extends Fragment {
 
         listaEventos = view.findViewById(R.id.recycler);
         listaEventos.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
+        ChamgleMail= view.findViewById(R.id.Mail);
+
+
+        ChamgleMail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogChangleMail();
+                DialogChamgleMail.show();
+            }
+        });
+
 
 
         CancelDateFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FillRecycler("all");
-                CancelDateFilter.hide();
+                CancelDateFilter.setVisibility(View.INVISIBLE);
                 TextoFiltroFecha.setText("Todos");
             }
         });
+
 
 
 
@@ -1614,7 +1774,7 @@ public class Principal extends Fragment {
                                             String FilterDate=dayOfMonth+"/"+month+"/"+year;
                                             TextoFiltroFecha.setText(FilterDate);
                                             FillRecycler(FilterDate);
-                                            CancelDateFilter.show();
+                                            CancelDateFilter.setVisibility(View.VISIBLE);;
 
                                         }
                                     },Año,Mes,Dia);
@@ -1644,15 +1804,123 @@ public class Principal extends Fragment {
 
 
 
-
-
-
-
         return view;
     }
 
 
 
+    public void DialogChangleMail()
+    {
+
+
+
+        android.app.AlertDialog.Builder builder=new android.app.AlertDialog.Builder(getContext()).setCancelable(true);
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.dialog_changle_mail,null);
+
+        Button BtnRequest=view.findViewById(R.id.BtnRequest);
+        final EditText MailRequest=view.findViewById(R.id.editRequest);
+        RecyclerLastEvents = view.findViewById(R.id.recycler);
+        RecyclerLastEvents.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
+
+        final FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+
+                ListLastEvents.clear();
+                final String Aux=mAuth.getCurrentUser().getEmail();
+                db.collection("Users").document(Aux).collection("Solicitudes")
+                //db.collection("Eventos")
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    for (QueryDocumentSnapshot document : task.getResult()) {
+
+                                        ListLastEvents.add(document.get("Mail").toString() );
+
+                                    }
+
+                                    AdapterLastSchedulle = new AdapterMail(ListLastEvents,getContext());
+                                    AdapterLastSchedulle.notifyDataSetChanged();
+                                    RecyclerLastEvents.setAdapter(AdapterLastSchedulle);
+
+                                    AdapterLastSchedulle.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+
+                                            sharedPreferences.edit().putString("SchedulleUser",ListLastEvents.get(RecyclerLastEvents.getChildAdapterPosition(v))).apply();
+
+                                            FillElements("all");
+                                            DialogChamgleMail.dismiss();
+
+                                        }
+                                    });
+
+
+
+                                } else {
+                                    Log.w(TAG, "Error getting documents.", task.getException());
+                                }
+                            }
+                        });
+
+
+
+
+
+        BtnRequest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                final String SolicitudPara=MailRequest.getText().toString();
+
+                Map<String, Object> Evento = new HashMap<>();
+                Evento.put("Aceptado",  false);
+                Evento.put("Admin",  false);
+                Evento.put("Correo",  mAuth.getCurrentUser().getEmail());
+
+                final FirebaseFirestore db2 = FirebaseFirestore.getInstance();
+
+
+                // db.collection("Acceso").document(mAuth.getUid())
+                db2.collection("Users").document(SolicitudPara).collection("Acceso").document(mAuth.getCurrentUser().getEmail())
+                        .set(Evento).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+
+                        Toast.makeText(getContext(),"Si se añadio",Toast.LENGTH_LONG).show();
+                    }
+                })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+
+                                Toast.makeText(getContext(),"Ocurrio un error",Toast.LENGTH_LONG).show();
+                            }
+                        });
+
+                Map<String, Object> Sol = new HashMap<>();
+                Sol.put("Mail", SolicitudPara );
+                db2.collection("Users").document(mAuth.getCurrentUser().getEmail()).collection("Solicitudes").document(SolicitudPara)
+                        .set(Sol);
+
+
+
+            }
+        });
+
+
+
+
+
+
+        builder.setView(view);
+        DialogChamgleMail=builder.create();
+        DialogChamgleMail.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+    }
 
 
 

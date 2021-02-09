@@ -47,6 +47,28 @@
                     android:background="@color/colorBlanco"
                     >
 
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        app:cardCornerRadius="6dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/ColorPromises"
+                        android:layout_gravity="center"
+                        >
+
+                        <TextView
+                            android:id="@+id/Mail"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="Mail"
+                            android:gravity="center"
+                            android:textColor="@color/colorNegro" />
+
+
+
+                    </androidx.cardview.widget.CardView>
 
 
 
@@ -60,6 +82,7 @@
                         android:gravity="center"
                         android:orientation="horizontal"
                         android:backgroundTint="@color/menucolors"
+                        android:layout_weight="1"
 
                         >
 
@@ -88,9 +111,6 @@
             </androidx.cardview.widget.CardView>
 
 
-
-
-
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -98,20 +118,26 @@
 
                 >
 
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/floatingActionButtonCancelFilter"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:backgroundTint="@color/cabecera"
-                    android:clickable="true"
-                    android:paddingHorizontal="0dp"
-                    android:src="@drawable/cancel"
 
-                    android:layout_marginTop="8dp"
-                    app:fabCustomSize="25dp"
-                    app:layout_constraintEnd_toEndOf="parent"
+                <Button
+                    android:id="@+id/buttonAux"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Button"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageButton
+                    android:id="@+id/floatingActionButtonCancelFilter"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/cancel100"
+                    android:backgroundTint="@color/cabecera"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:elevation="20dp"
+                    />
+
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler"
@@ -129,14 +155,14 @@
                     android:id="@+id/FloatingCreateEvent"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:src="@drawable/add"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
                     android:layout_margin="16dp"
                     android:backgroundTint="@color/ColorSchedulle"
-                    app:borderWidth="0dp"
+                    android:clickable="true"
+                    android:src="@drawable/add"
                     android:visibility="invisible"
+                    app:borderWidth="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
 
                     />
 
@@ -163,7 +189,6 @@
                         android:text="Buscando datos"
                         android:textColor="@color/colorNegro" />
                 </LinearLayout>
-
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

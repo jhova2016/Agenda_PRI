@@ -35,6 +35,7 @@ public class SingUP extends AppCompatActivity {
     private FirebaseAuth mAuth;
 
     TextView Correo,Contraseña,ConfrimarContraseña;
+    String AuxCorreo=null;
     FloatingActionButton Registrarse;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +51,8 @@ public class SingUP extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+
+
                 if(Contraseña.getText().toString().equals("")||ConfrimarContraseña.getText().toString().equals("")||Correo.getText().toString().equals(""))
                 {
                     Toast.makeText(getApplicationContext(), "Todos los campos deben ser llenados",
@@ -59,7 +62,10 @@ public class SingUP extends AppCompatActivity {
                 else {
                     if(Contraseña.getText().toString().equals(ConfrimarContraseña.getText().toString()))
                     {
-                        crearUsuario(Correo.getText().toString(), Contraseña.getText().toString());
+                        AuxCorreo=Correo.getText().toString();
+                        AuxCorreo=AuxCorreo.toLowerCase();
+                        AuxCorreo=AuxCorreo.replace(" ","");
+                        crearUsuario(AuxCorreo, Contraseña.getText().toString());
                     }
                     else
                     {
@@ -100,12 +106,14 @@ public class SingUP extends AppCompatActivity {
         if (user != null ){
 
             Map<String, Object> Evento = new HashMap<>();
-            Evento.put("Aceptado",  false);
-            Evento.put("Admin",  false);
-            Evento.put("Correo",  Correo.getText().toString());
+            Evento.put("Aceptado",  true);
+            Evento.put("Admin",  true);
+            Evento.put("Correo",  AuxCorreo);
 
             FirebaseFirestore db = FirebaseFirestore.getInstance();
-            db.collection("Acceso").document(mAuth.getUid())
+            db.collection("Users").document(AuxCorreo).collection("Acceso").document(AuxCorreo)
+
+            //db.collection("Acceso").document(mAuth.getUid())
                     .set(Evento)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override

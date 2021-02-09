@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         FragSchedulle = new Principal();
         FragProposed = new Propuestos();
         FragPromises = new Promises() ;
+        BtnOpciones=findViewById(R.id.ImageBtnOpciones);
 
         fragmentUiManager=new FragmentUiManager(fragmentManager,FragSchedulle,FragProposed,FragPromises);
 
@@ -95,8 +96,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         FirebaseAuth mAuth=FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
         Correo.setText(user.getEmail());
-        DocumentReference docRef1 = db.collection("Acceso").document(mAuth.getUid());
-        docRef1.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        db.collection("Users").document(mAuth.getUid()).collection("Acceso").document(mAuth.getUid())
+        //DocumentReference docRef1 = db.collection("Acceso").document(mAuth.getUid());
+        //docRef1
+                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
@@ -118,20 +121,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                         {
 
 
-
                             //replaceFragment(FragSchedulle);
                             bottomNavigationView.setSelectedItemId(R.id.action_inicio);
 
 
-
-
-                            BtnOpciones.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    DialogOpcionesFuncion();
-                                    DialogOpciones.show();
-                                }
-                            });
 
                         }
 
@@ -144,7 +137,16 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             }
         });
 
-        BtnOpciones=findViewById(R.id.ImageBtnOpciones);
+
+        BtnOpciones.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogOpcionesFuncion();
+                DialogOpciones.show();
+            }
+        });
+
+
 
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation_view);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);

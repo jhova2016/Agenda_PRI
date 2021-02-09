@@ -70,7 +70,11 @@ public class SingIN extends AppCompatActivity {
 
                 }
                 else {
-                    RevisarUsuario(Correo.getText().toString(),Contraseña.getText().toString());
+                    String AuxCorreo=null;
+                    AuxCorreo=Correo.getText().toString();
+                    AuxCorreo=AuxCorreo.toLowerCase();
+                    AuxCorreo=AuxCorreo.replace(" ","");
+                    RevisarUsuario(AuxCorreo,Contraseña.getText().toString());
                 }
 
 
@@ -130,12 +134,11 @@ public class SingIN extends AppCompatActivity {
     private void updateUI2(final FirebaseUser currentUser){
         if (currentUser != null ){
 
-
-
             final FirebaseFirestore db = FirebaseFirestore.getInstance();
             FirebaseAuth mAuth=FirebaseAuth.getInstance();
-            DocumentReference docRef1 = db.collection("Acceso").document(mAuth.getUid());
-            docRef1.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            db.collection("Users").document(currentUser.getEmail()).collection("Acceso").document(currentUser.getEmail())
+            //DocumentReference docRef1 = db.collection("Acceso").document(mAuth.getUid());
+            .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                     if (task.isSuccessful()) {

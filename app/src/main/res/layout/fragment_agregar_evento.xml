@@ -33,6 +33,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:weightSum="2"
+            android:layout_marginBottom="8dp"
             >
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -47,7 +48,7 @@
                     android:text="Tipo de evento"
                     android:textColor="@color/color1"
                     android:gravity="left"
-                    android:textSize="16dp"
+                    android:textSize="14dp"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
                     android:layout_marginTop="8dp"
@@ -71,7 +72,7 @@
                         android:id="@+id/SpinnerTipoDeEvento"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
-                        android:spinnerMode="dialog"
+                        android:spinnerMode="dropdown"
 
                         android:gravity="center_vertical"
                         android:ems="10"
@@ -86,7 +87,7 @@
             </LinearLayout>
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:layout_weight="1"
                 >
@@ -97,7 +98,7 @@
                     android:text="Fecha de evento*"
                     android:textColor="@color/color1"
                     android:gravity="left"
-                    android:textSize="16dp"
+                    android:textSize="14dp"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
                     android:layout_marginTop="8dp"
@@ -115,6 +116,9 @@
                     android:layout_weight="1"
                     app:cardBackgroundColor="@color/colorGris"
                     >
+
+
+
                     <TextView
                         android:id="@+id/editFechaDeEvento"
                         android:layout_width="match_parent"
@@ -137,122 +141,111 @@
 
         </LinearLayout>
 
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Localidad*"
-            android:textColor="@color/color1"
-            android:gravity="left"
-            android:textSize="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="4dp"
-            android:layout_weight="1"
-            />
-
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardCornerRadius="6dp"
-            app:cardElevation="1dp"
+            app:cardElevation="0dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
+            android:layout_marginBottom="8dp"
             android:layout_weight="1"
             app:cardBackgroundColor="@color/colorGris"
             >
-            <EditText
-                android:id="@+id/editLocalidad"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:background="@color/colorGris"
-                android:padding="8dp"
-                android:textColor="@color/colorNegro"
-                android:hint="#####"
 
-                />
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Localidad*"
+                android:textColorHint="@color/color1"
+                android:layout_margin="4dp"
+
+                >
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editLocalidad"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:inputType="text"
+                    android:textColorHint="@color/color1"
+                    android:textColor="@color/colorNegro"
+                    android:textSize="14dp"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
 
         </androidx.cardview.widget.CardView>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Lugar"
-            android:textColor="@color/color1"
-            android:gravity="left"
-            android:textSize="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="4dp"
-            android:layout_weight="1"
-            />
+
 
         <androidx.cardview.widget.CardView
             android:id="@+id/Lugar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardCornerRadius="6dp"
-            app:cardElevation="1dp"
+            android:layout_marginBottom="8dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_weight="1"
             app:cardBackgroundColor="@color/colorGris"
+            app:cardElevation="0dp"
             >
-            <EditText
-                android:id="@+id/editLugar"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:background="@color/colorGris"
-                android:padding="8dp"
-                android:textColor="@color/colorNegro"
-                android:hint="#####"
 
-                />
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Lugar"
+                android:textColorHint="@color/color1"
+                android:layout_margin="4dp"
+                >
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editLugar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:inputType="text"
+                    android:textColorHint="@color/color1"
+                    android:textColor="@color/colorNegro"
+                    android:textSize="14dp"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
+
 
         </androidx.cardview.widget.CardView>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Informacion"
-            android:textColor="@color/color1"
-            android:gravity="left"
-            android:textSize="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="4dp"
-            android:layout_weight="1"
-            />
+
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardCornerRadius="6dp"
-            app:cardElevation="1dp"
+            android:layout_marginBottom="8dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_weight="1"
             app:cardBackgroundColor="@color/colorGris"
+            app:cardElevation="0dp"
             >
-            <EditText
-                android:id="@+id/editInformacion"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:background="@color/colorGris"
-                android:padding="8dp"
-                android:textColor="@color/colorNegro"
-                android:hint="#####"
 
-                />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Información"
+                android:textColorHint="@color/color1"
+                android:layout_margin="4dp"
+                >
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editInformacion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:inputType="text"
+                    android:textColorHint="@color/color1"
+                    android:textColor="@color/colorNegro"
+                    android:textSize="14dp"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
+
 
         </androidx.cardview.widget.CardView>
 
@@ -264,6 +257,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:weightSum="2"
+            android:layout_marginBottom="8dp"
             >
 
             <LinearLayout
@@ -279,7 +273,7 @@
                     android:text="Hora de inicio*"
                     android:textColor="@color/color1"
                     android:gravity="left"
-                    android:textSize="16dp"
+                    android:textSize="14dp"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
                     android:layout_marginTop="8dp"
@@ -326,7 +320,7 @@
                     android:text="Hora de final*"
                     android:textColor="@color/color1"
                     android:gravity="left"
-                    android:textSize="16dp"
+                    android:textSize="14dp"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
                     android:layout_marginTop="8dp"
@@ -367,82 +361,74 @@
 
 
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Responsable"
-            android:textColor="@color/color1"
-            android:gravity="left"
-            android:textSize="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="4dp"
-            android:layout_weight="1"
-            />
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardCornerRadius="6dp"
-            app:cardElevation="1dp"
+            android:layout_marginBottom="8dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_weight="1"
             app:cardBackgroundColor="@color/colorGris"
+            app:cardElevation="0dp"
             >
-            <EditText
-                android:id="@+id/editResponsable"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:background="@color/colorGris"
-                android:padding="8dp"
-                android:textColor="@color/colorNegro"
-                android:hint="#####"
 
-                />
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Responsable"
+                android:textColorHint="@color/color1"
+                android:layout_margin="4dp"
+                >
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editResponsable"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:inputType="text"
+                    android:textColorHint="@color/color1"
+                    android:textColor="@color/colorNegro"
+                    android:textSize="14dp"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
 
         </androidx.cardview.widget.CardView>
 
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Vestimenta"
-            android:textColor="@color/color1"
-            android:gravity="left"
-            android:textSize="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="4dp"
-            android:layout_weight="1"
-            />
-
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardCornerRadius="6dp"
-            app:cardElevation="1dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_weight="1"
             app:cardBackgroundColor="@color/colorGris"
+            app:cardElevation="0dp"
             >
-            <EditText
-                android:id="@+id/editVestimenta"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:background="@color/colorGris"
-                android:padding="8dp"
-                android:textColor="@color/colorNegro"
-                android:hint="#####"
 
-                />
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Vestimenta"
+                android:textColorHint="@color/color1"
+                android:layout_margin="4dp"
+                >
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editVestimenta"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:inputType="text"
+                    android:textColorHint="@color/color1"
+                    android:textColor="@color/colorNegro"
+                    android:textSize="14dp"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
 
         </androidx.cardview.widget.CardView>
 

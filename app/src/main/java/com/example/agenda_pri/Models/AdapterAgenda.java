@@ -97,8 +97,6 @@ public class AdapterAgenda  extends RecyclerView.Adapter<AdapterAgenda.ViewHolde
         }
 
 
-
-
         if(!ListDatos.get(position).getInformacion().equals(""))
         {
             holder.Informacion.setText(ListDatos.get(position).getInformacion());
