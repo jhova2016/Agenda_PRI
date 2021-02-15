@@ -67,7 +67,6 @@ public class SingIN extends AppCompatActivity {
                 if(Correo.getText().toString().equals("")||Contraseña.getText().toString().equals(""))
                 {
                     Toast.makeText(getApplicationContext(), "Complete ambos campos", Toast.LENGTH_LONG).show();
-
                 }
                 else {
                     String AuxCorreo=null;
@@ -147,7 +146,6 @@ public class SingIN extends AppCompatActivity {
                             Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                             if(document.get("Aceptado").toString().equals("true"))
                             {
-
 
                                 sharedPreferences = getSharedPreferences("ADMINISTRADORES", MODE_PRIVATE);
 

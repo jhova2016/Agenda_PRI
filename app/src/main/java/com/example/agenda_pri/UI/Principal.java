@@ -2,10 +2,7 @@ package com.example.agenda_pri.UI;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.Dialog;
-import android.app.Notification;
 import android.app.TimePickerDialog;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -13,10 +10,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,7 +18,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.LinearInterpolator;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -40,11 +33,8 @@ import android.widget.Toast;
 
 import com.example.agenda_pri.Models.AdapterAgenda;
 import com.example.agenda_pri.Models.AdapterMail;
-import com.example.agenda_pri.Models.AdapterSchedulleLitle;
 import com.example.agenda_pri.Models.Elemento_Evento;
 import com.example.agenda_pri.R;
-import com.example.agenda_pri.UI.Login.SingIN;
-import com.example.agenda_pri.Utilerias.FragmentUiManager;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -52,13 +42,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -73,8 +61,6 @@ import java.util.Map;
 
 import static android.content.ContentValues.TAG;
 import static android.content.Context.MODE_PRIVATE;
-import static com.example.agenda_pri.R.id.LayoutProgressBar;
-import static com.example.agenda_pri.R.id.Mail;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -145,8 +131,11 @@ public class Principal extends Fragment {
     RecyclerView RecyclerLastEvents;
     AdapterMail AdapterLastSchedulle;
 
-    TextView ChamgleMail;
+    LinearLayout BtnChamgleMail;
+    TextView TxtChamgleMail;
     //end val of dialognewevent
+
+    FirebaseFirestore db;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -183,6 +172,7 @@ public class Principal extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         sharedPreferences = getContext().getSharedPreferences("ADMINISTRADORES", MODE_PRIVATE);
 
@@ -236,12 +226,10 @@ public class Principal extends Fragment {
 
         Titulo.setText("Desea editar este evento?");
         Descripcion.setText("Esta accion no se puede deshacer");
-        final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         BtnAceptar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
 
 
                 DocumentReference washingtonRef = db.collection("Users").document(mAuth.getUid()).collection("Eventos").document(ID);
@@ -269,8 +257,8 @@ public class Principal extends Fragment {
                                 Map<String, Object> Hora = new HashMap<>();
                                 Hora.put("UltimaActualizacion",  objSDFQuitar .format(date));
 
-                                FirebaseFirestore db2 = FirebaseFirestore.getInstance();
-                                db2.collection("Actualizar").document("Bandera")
+
+                                db.collection("Actualizar").document("Bandera")
                                         .set(Hora)
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
@@ -340,7 +328,6 @@ public class Principal extends Fragment {
         BtnAceptar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FirebaseFirestore db = FirebaseFirestore.getInstance();
 
                 DocumentReference docRef = db.collection("Users").document(mAuth.getUid()).collection("Eventos").document(EntId);
                 docRef.delete();
@@ -351,8 +338,8 @@ public class Principal extends Fragment {
                 Map<String, Object> Hora = new HashMap<>();
                 Hora.put("UltimaActualizacion",  objSDFQuitar .format(date));
 
-                FirebaseFirestore db2 = FirebaseFirestore.getInstance();
-                db2.collection("Actualizar").document("Bandera")
+
+                db.collection("Actualizar").document("Bandera")
                         .set(Hora)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
@@ -449,7 +436,7 @@ public class Principal extends Fragment {
 
 
 
-                final FirebaseFirestore db = FirebaseFirestore.getInstance();
+
                 db.collection("Users").document(Aux).collection("DiasBloqueados")
                 //db.collection("DiasBloqueados")
                         .get()
@@ -515,10 +502,6 @@ public class Principal extends Fragment {
                                                     FechaDeCalendarizacion=Calendario.get(Calendar.DAY_OF_MONTH)+"/"+Mes+"/"+Calendario.get(Calendar.YEAR);
                                                     QuienCalendarizo=user.getEmail();;
 
-
-
-
-
                                                     Map<String, Object> Evento = new HashMap<>();
                                                     Evento.put("TipoDeEvento",  TipoDeEvento);
                                                     Evento.put("Localidad",     Localidad.getText().toString());
@@ -536,7 +519,6 @@ public class Principal extends Fragment {
                                                     Evento.put("FechaDeCalendarizacion",FechaDeCalendarizacion);
                                                     Evento.put("QuienCalendarizo",      QuienCalendarizo);
 
-                                                    FirebaseFirestore db = FirebaseFirestore.getInstance();
                                                     ///
 
                                                     db.collection("Users").document(Aux).collection("Eventos")
@@ -555,9 +537,7 @@ public class Principal extends Fragment {
                                                                     Map<String, Object> Hora = new HashMap<>();
                                                                     Hora.put("UltimaActualizacion",  objSDFQuitar .format(date));
 
-                                                                    FirebaseFirestore db2 = FirebaseFirestore.getInstance();
-
-                                                                    db2.collection("Users").document(Aux).collection("Actualizar").document("Bandera")
+                                                                    db.collection("Users").document(Aux).collection("Actualizar").document("Bandera")
                                                                             .set(Hora)
                                                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                                                 @Override
@@ -582,7 +562,7 @@ public class Principal extends Fragment {
                                                                     NuevaInfoDeNotificacion.put("UltimaActualizacion",  objSDFQuitar .format(date));
 
 
-                                                                    db2.collection("Users").document(Aux).collection("Actualizar").document("NuevoEventoPropuesto")
+                                                                    db.collection("Users").document(Aux).collection("Actualizar").document("NuevoEventoPropuesto")
                                                                             .set(NuevaInfoDeNotificacion)
                                                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                                                 @Override
@@ -643,10 +623,6 @@ public class Principal extends Fragment {
                                                     FechaDeCalendarizacion=Calendario.get(Calendar.DAY_OF_MONTH)+"/"+Mes+"/"+Calendario.get(Calendar.YEAR);
                                                     QuienCalendarizo=user.getEmail();;
 
-
-
-
-
                                                     Map<String, Object> Evento = new HashMap<>();
                                                     Evento.put("TipoDeEvento",  TipoDeEvento);
                                                     Evento.put("Localidad",     Localidad.getText().toString());
@@ -666,7 +642,6 @@ public class Principal extends Fragment {
 
 
                                                     ///
-                                                    FirebaseFirestore db = FirebaseFirestore.getInstance();
                                                     db.collection("Users").document(Aux).collection("Eventos")
                                                     //db.collection("Eventos")
                                                             .add(Evento)
@@ -683,8 +658,8 @@ public class Principal extends Fragment {
                                                                     Map<String, Object> Hora = new HashMap<>();
                                                                     Hora.put("UltimaActualizacion",  objSDFQuitar .format(date));
 
-                                                                    FirebaseFirestore db2 = FirebaseFirestore.getInstance();
-                                                                   db2.collection("Users").document(Aux).collection("Actualizar").document("Bandera")
+
+                                                                   db.collection("Users").document(Aux).collection("Actualizar").document("Bandera")
                                                                             .set(Hora)
                                                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                                                 @Override
@@ -1489,8 +1464,6 @@ public class Principal extends Fragment {
     {
         Evento.clear();
         final String Aux=sharedPreferences.getString("SchedulleUser", mAuth.getCurrentUser().getEmail());
-        final FirebaseFirestore db = FirebaseFirestore.getInstance();
-
 
                 db.collection("Users").document(Aux).collection("Eventos")
                         //db.collection("Eventos")
@@ -1706,6 +1679,8 @@ public class Principal extends Fragment {
 
             }
         });
+        final String Aux=sharedPreferences.getString("SchedulleUser", mAuth.getCurrentUser().getEmail());
+        TxtChamgleMail.setText(Aux);
 
 
     }
@@ -1733,10 +1708,13 @@ public class Principal extends Fragment {
 
         listaEventos = view.findViewById(R.id.recycler);
         listaEventos.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
-        ChamgleMail= view.findViewById(R.id.Mail);
+        BtnChamgleMail = view.findViewById(R.id.changeMail);
+        TxtChamgleMail= view.findViewById(R.id.Mail);
 
+        final String Aux=sharedPreferences.getString("SchedulleUser", mAuth.getCurrentUser().getEmail());
+        TxtChamgleMail.setText(Aux);
 
-        ChamgleMail.setOnClickListener(new View.OnClickListener() {
+        BtnChamgleMail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DialogChangleMail();
@@ -1751,7 +1729,7 @@ public class Principal extends Fragment {
             public void onClick(View v) {
                 FillRecycler("all");
                 CancelDateFilter.setVisibility(View.INVISIBLE);
-                TextoFiltroFecha.setText("Todos");
+                TextoFiltroFecha.setText("Todos        ");
             }
         });
 
@@ -1793,9 +1771,28 @@ public class Principal extends Fragment {
         BotonFlotante.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String Aux=sharedPreferences.getString("SchedulleUser", mAuth.getCurrentUser().getEmail());
+                db.collection("Users").document(Aux).collection("Acceso").document(mAuth.getCurrentUser().getEmail())
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if(task.getResult().get("Admin").toString().equals("true"))
+                                {
+                                    NewEvent();
+                                    DialogNewEvent.show();
 
-            NewEvent();
-            DialogNewEvent.show();
+                                }
+                                else
+                                {
+                                    Toast.makeText(getContext(),"No tiene los permisos",Toast.LENGTH_LONG).show();
+                                }
+
+
+
+                            }
+                        });
+
 
 
             }
@@ -1812,8 +1809,6 @@ public class Principal extends Fragment {
     public void DialogChangleMail()
     {
 
-
-
         android.app.AlertDialog.Builder builder=new android.app.AlertDialog.Builder(getContext()).setCancelable(true);
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_changle_mail,null);
@@ -1822,9 +1817,6 @@ public class Principal extends Fragment {
         final EditText MailRequest=view.findViewById(R.id.editRequest);
         RecyclerLastEvents = view.findViewById(R.id.recycler);
         RecyclerLastEvents.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
-
-        final FirebaseFirestore db = FirebaseFirestore.getInstance();
-
 
                 ListLastEvents.clear();
                 final String Aux=mAuth.getCurrentUser().getEmail();
@@ -1855,6 +1847,8 @@ public class Principal extends Fragment {
                                             FillElements("all");
                                             DialogChamgleMail.dismiss();
 
+
+
                                         }
                                     });
 
@@ -1874,38 +1868,64 @@ public class Principal extends Fragment {
             @Override
             public void onClick(View v) {
 
-                final String SolicitudPara=MailRequest.getText().toString();
+                String SolicitudPara=MailRequest.getText().toString();
 
-                Map<String, Object> Evento = new HashMap<>();
-                Evento.put("Aceptado",  false);
-                Evento.put("Admin",  false);
-                Evento.put("Correo",  mAuth.getCurrentUser().getEmail());
+                SolicitudPara=SolicitudPara.toLowerCase();
+                SolicitudPara=SolicitudPara.replace(" ","");
+                final String finalSolicitudPara = SolicitudPara;
 
-                final FirebaseFirestore db2 = FirebaseFirestore.getInstance();
+                Toast.makeText(getContext(),finalSolicitudPara,Toast.LENGTH_LONG).show();
+                DocumentReference docRef = db.collection("Users").document(finalSolicitudPara).collection("Acceso").document(finalSolicitudPara);
 
-
-                // db.collection("Acceso").document(mAuth.getUid())
-                db2.collection("Users").document(SolicitudPara).collection("Acceso").document(mAuth.getCurrentUser().getEmail())
-                        .set(Evento).addOnSuccessListener(new OnSuccessListener<Void>() {
+                docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
-                    public void onSuccess(Void aVoid) {
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
 
-                        Toast.makeText(getContext(),"Si se añadio",Toast.LENGTH_LONG).show();
-                    }
-                })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                Toast.makeText(getContext(),"SI Existe Este Usuario",Toast.LENGTH_LONG).show();
+                                Map<String, Object> Evento = new HashMap<>();
+                                Evento.put("Aceptado",  false);
+                                Evento.put("Admin",  false);
+                                Evento.put("Correo",  mAuth.getCurrentUser().getEmail());
 
-                                Toast.makeText(getContext(),"Ocurrio un error",Toast.LENGTH_LONG).show();
+                                final FirebaseFirestore db2 = FirebaseFirestore.getInstance();
+
+
+                                // db.collection("Acceso").document(mAuth.getUid())
+                                db2.collection("Users").document(finalSolicitudPara).collection("Acceso").document(mAuth.getCurrentUser().getEmail())
+                                        .set(Evento).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+
+                                        Toast.makeText(getContext(),"Si se añadio",Toast.LENGTH_LONG).show();
+                                    }
+                                })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+
+                                                Toast.makeText(getContext(),"Ocurrio un error",Toast.LENGTH_LONG).show();
+                                            }
+                                        });
+
+                                Map<String, Object> Sol = new HashMap<>();
+                                Sol.put("Mail", finalSolicitudPara);
+                                db2.collection("Users").document(mAuth.getCurrentUser().getEmail()).collection("Solicitudes").document(finalSolicitudPara)
+                                        .set(Sol);
+
+
+
+                            } else {
+                                    Toast.makeText(getContext(),"No Existe Este Usuario",Toast.LENGTH_LONG).show();
+
                             }
-                        });
-
-                Map<String, Object> Sol = new HashMap<>();
-                Sol.put("Mail", SolicitudPara );
-                db2.collection("Users").document(mAuth.getCurrentUser().getEmail()).collection("Solicitudes").document(SolicitudPara)
-                        .set(Sol);
-
+                        } else {
+                            Log.d(TAG, "get failed with ", task.getException());
+                        }
+                    }
+                });
 
 
             }

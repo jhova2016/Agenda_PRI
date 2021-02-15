@@ -125,6 +125,17 @@
             >
 
             <Button
+                android:id="@+id/BtnPeticiones"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Peticiones"
+                android:backgroundTint="@color/cabecera"
+                android:textColor="@color/colorBlanco"
+
+                />
+
+            <Button
                 android:id="@+id/BtnOpcionesDialog2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

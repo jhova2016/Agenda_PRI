@@ -89,8 +89,19 @@ public class Propuestos extends Fragment {
 
 
     FirebaseAuth mAuth;
+    //
 
 
+
+   /* en la oficina
+    mañna
+    carrizal basmba moroo
+    alkas 12
+
+
+    a las 4
+    crucero hacia la 20 derecha arbol de guaya
+*/
     String TipoDeEvento;
     EditText Localidad;
     EditText Lugar;
@@ -119,7 +130,7 @@ public class Propuestos extends Fragment {
 
     //end val of dialognewevent
 
-
+    FirebaseFirestore db;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -155,6 +166,10 @@ public class Propuestos extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        db = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -187,13 +202,14 @@ public class Propuestos extends Fragment {
 
         Titulo.setText("Desea editar este evento?");
         Descripcion.setText("Esta accion no se puede deshacer");
-        final FirebaseFirestore db = FirebaseFirestore.getInstance();
+
 
         BtnAceptar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                DocumentReference washingtonRef = db.collection("Eventos").document(ID);
+
+                DocumentReference washingtonRef = db.collection("Users").document(mAuth.getUid()).collection("Eventos").document(ID);
 
                 washingtonRef
                         .update("TipoDeEvento",  TipoDeEventoEditarEvento,
@@ -218,8 +234,8 @@ public class Propuestos extends Fragment {
                                 Map<String, Object> Hora = new HashMap<>();
                                 Hora.put("UltimaActualizacion",  objSDFQuitar .format(date));
 
-                                FirebaseFirestore db2 = FirebaseFirestore.getInstance();
-                                db2.collection("Actualizar").document("Bandera")
+                                db.collection("Users").document(mAuth.getUid()).collection("Actualizar").document("Bandera")
+                                //db.collection("Actualizar").document("Bandera")
                                         .set(Hora)
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
@@ -289,8 +305,12 @@ public class Propuestos extends Fragment {
         BtnAceptar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FirebaseFirestore db = FirebaseFirestore.getInstance();
-                DocumentReference docRef = db.collection("Eventos").document(EntId);
+
+                final String Aux=sharedPreferences.getString("SchedulleUser", mAuth.getCurrentUser().getEmail());
+
+
+                DocumentReference docRef =db.collection("Users").document(Aux).collection("Eventos").document(EntId);
+               // DocumentReference docRef = db.collection("Eventos").document(EntId);
                 docRef.delete();
 
                 SimpleDateFormat objSDFQuitar  = new SimpleDateFormat("HH:mm:ss");
@@ -388,8 +408,9 @@ public class Propuestos extends Fragment {
         BtnDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                final String Aux=sharedPreferences.getString("SchedulleUser", mAuth.getCurrentUser().getEmail());
 
-                DocumentReference washingtonRef = db.collection("Eventos").document(ID);
+                DocumentReference washingtonRef = db.collection("Users").document(Aux).collection("Eventos").document(ID);
 
                 washingtonRef
                         .update("EstadoDeEvento",  "Futuro"
@@ -406,8 +427,8 @@ public class Propuestos extends Fragment {
                                 Map<String, Object> Hora = new HashMap<>();
                                 Hora.put("UltimaActualizacion",  objSDFQuitar .format(date));
 
-                                FirebaseFirestore db2 = FirebaseFirestore.getInstance();
-                                db2.collection("Actualizar").document("Bandera")
+                                db.collection("Users").document(Aux).collection("Actualizar").document("Bandera")
+                                //db.collection("Actualizar").document("Bandera")
                                         .set(Hora)
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
@@ -701,7 +722,7 @@ public class Propuestos extends Fragment {
 
         NoSeEncontraron=view.findViewById(R.id.NoSeEncontraron);
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
 
         sharedPreferences = getContext().getSharedPreferences("ADMINISTRADORES", MODE_PRIVATE);
 
@@ -722,9 +743,9 @@ public class Propuestos extends Fragment {
         });
 
 
+        final String Aux=sharedPreferences.getString("SchedulleUser", mAuth.getCurrentUser().getEmail());
 
-
-        DocumentReference docRef = db.collection("Actualizar").document("Bandera");
+        DocumentReference docRef = db.collection("Users").document(Aux).collection("Actualizar").document("Bandera");
 
         docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
@@ -734,8 +755,8 @@ public class Propuestos extends Fragment {
                 adapterAgenda.notifyDataSetChanged();
                 listaEventos.setAdapter(adapterAgenda);
 
-                final FirebaseFirestore db = FirebaseFirestore.getInstance();
-                db.collection("Eventos")
+                db.collection("Users").document(Aux).collection("Eventos")
+                //db.collection("Eventos")
                         .get()
                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override
@@ -943,8 +964,11 @@ public class Propuestos extends Fragment {
             @Override
             public void onClick(View v) {
 
-                final FirebaseFirestore db = FirebaseFirestore.getInstance();
-                db.collection("DiasBloqueados")
+
+                final String Aux=sharedPreferences.getString("SchedulleUser", mAuth.getCurrentUser().getEmail());
+
+
+                db.collection("Users").document(Aux).collection("DiasBloqueados")
                         .get()
                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
 
@@ -974,7 +998,7 @@ public class Propuestos extends Fragment {
                                         }
                                         else
                                         {
-                                            mAuth = FirebaseAuth.getInstance();
+
                                             FirebaseUser user = mAuth.getCurrentUser();
                                             Calendar Calendario= Calendar.getInstance();
 
@@ -1008,8 +1032,10 @@ public class Propuestos extends Fragment {
                                             Evento.put("FechaDeCalendarizacion",FechaDeCalendarizacion);
                                             Evento.put("QuienCalendarizo",      QuienCalendarizo);
 
-                                            FirebaseFirestore db = FirebaseFirestore.getInstance();
-                                            db.collection("Eventos")
+                                            final String Aux=sharedPreferences.getString("SchedulleUser", mAuth.getCurrentUser().getEmail());
+
+                                            db.collection("Users").document(Aux).collection("Eventos")
+                                            //db.collection("Eventos")
                                                     .add(Evento)
                                                     .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                                         @Override
@@ -1024,8 +1050,9 @@ public class Propuestos extends Fragment {
                                                             Map<String, Object> Hora = new HashMap<>();
                                                             Hora.put("UltimaActualizacion",  objSDFQuitar .format(date));
 
-                                                            FirebaseFirestore db2 = FirebaseFirestore.getInstance();
-                                                            db2.collection("Actualizar").document("Bandera")
+                                                            final String Aux=sharedPreferences.getString("SchedulleUser", mAuth.getCurrentUser().getEmail());
+
+                                                            db.collection("Users").document(Aux).collection("Actualizar").document("Bandera")
                                                                     .set(Hora)
                                                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                                         @Override
@@ -1049,8 +1076,11 @@ public class Propuestos extends Fragment {
                                                             NuevaInfoDeNotificacion.put("QuienCalendarizo",      QuienCalendarizo);
                                                             NuevaInfoDeNotificacion.put("UltimaActualizacion",  objSDFQuitar .format(date));
 
+                                                           
 
-                                                            db2.collection("Actualizar").document("NuevoEventoPropuesto")
+                                                            db.collection("Users").document(Aux).collection("Actualizar").document("NuevoEventoPropuesto")
+
+                                                           // db.collection("Actualizar").document("NuevoEventoPropuesto")
                                                                     .set(NuevaInfoDeNotificacion)
                                                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                                         @Override
