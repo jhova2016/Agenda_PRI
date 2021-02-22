@@ -27,20 +27,39 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:orientation="horizontal">
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="aceptado"
+                android:textSize="12dp"
+                android:textColor="@color/colorNegro"
+                android:gravity="center"
+                />
 
             <Switch
                 android:id="@+id/switchAceptado"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+
                 android:text="Switch" />
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="administrador"
+                android:textSize="12dp"
+                android:textColor="@color/colorNegro"
+                android:gravity="center"
+                />
 
             <Switch
                 android:id="@+id/switchAdmin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+
                 android:text="Switch" />
         </LinearLayout>
 

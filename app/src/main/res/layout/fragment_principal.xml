@@ -43,55 +43,39 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    android:gravity="center"
                     android:background="@color/colorBlanco"
                     android:weightSum="2"
 
                     >
+                    <TextView
+
+                        android:id="@+id/Titulo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="Agenda"
+                        android:textColor="@color/aux1"
+                        android:textSize="20dp"
+                        android:gravity="left"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginBottom="0dp"
+                        android:layout_weight="1"
 
 
-
-                        <LinearLayout
-                            android:id="@+id/changeMail"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:layout_weight="1"
-                            android:gravity="center"
-
-
-                            >
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="4dp"
-                                android:src="@drawable/change"
-                                app:tint="@color/hint" />
-                            <TextView
-                                android:id="@+id/Mail"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:text="Mail.............."
-                                android:gravity="center"
-                                android:textColor="@color/colorNegro"
-                                android:maxLines="1"
-                                android:maxLength="10"
-
-                                />
-                        </LinearLayout>
+                        />
 
 
 
 
 
 
-<LinearLayout
-    android:layout_width="1dp"
-    android:layout_height="match_parent"
-    android:background="@color/hint"
-    android:layout_margin="4dp"
-    />
 
+
+                    <LinearLayout
+                        android:layout_width="2dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/aux1"
+                        android:layout_margin="2dp"
+                        />
 
 
                     <LinearLayout
@@ -103,6 +87,7 @@
                         android:orientation="horizontal"
                         android:backgroundTint="@color/menucolors"
                         android:layout_weight="1"
+                        android:background="@color/BlancoTransparente"
 
                         >
 
@@ -131,6 +116,8 @@
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
+
+
 
 
             <androidx.constraintlayout.widget.ConstraintLayout

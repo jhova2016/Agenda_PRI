@@ -67,7 +67,7 @@
 
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
 
@@ -84,18 +84,26 @@
 
                     app:srcCompat="@drawable/fecha" />
 
-                <TextView
-                    android:id="@+id/Date"
-                    android:layout_width="wrap_content"
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Fecha"
-                    android:textSize="18dp"
-                    android:textColor="@color/colorNegro"
-                    android:gravity="center_vertical"
+                    android:hint="Fecha"
+                    android:textColorHint="@color/color1"
 
+                    >
 
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/Date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:textColor="@color/colorNegro"
+                        android:textColorHint="@color/color1"
+                        android:textSize="14dp" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-                    />
 
 
 
@@ -116,52 +124,51 @@
 
             >
 
-            <TextView
+
+
+
+
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="lugar"
-                android:textColor="@color/colorGris2"
-                android:textSize="9dp"
-                android:gravity="center_vertical"
-                android:layout_marginLeft="12dp"/>
+                android:hint="Lugar"
+                android:textColorHint="@color/color1"
+                android:layout_weight="1"
+
+                >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/Place"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:textColor="@color/colorNegro"
+                    android:textColorHint="@color/color1"
+                    android:textSize="14dp" />
+            </com.google.android.material.textfield.TextInputLayout>
 
 
 
-            <TextView
-                android:id="@+id/Place"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="lugar"
-                android:textColor="@color/colorNegro"
-                android:textSize="16dp"
-                android:gravity="center_vertical"
-                android:layout_marginLeft="12dp"
-                android:layout_marginRight="12dp"
+                android:hint="Informacion"
+                android:textColorHint="@color/color1"
+                android:layout_weight="1"
 
+                >
 
-                />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Informacion"
-                android:textColor="@color/colorGris2"
-                android:textSize="9dp"
-                android:gravity="center_vertical"
-                android:layout_marginLeft="12dp"/>
-            <TextView
-                android:id="@+id/Information"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Informacion"
-                android:textColor="@color/colorNegro"
-                android:textSize="16dp"
-                android:gravity="center_vertical"
-                android:layout_marginLeft="12dp"
-                android:layout_marginRight="12dp"
-
-
-                />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/Information"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:textColor="@color/colorNegro"
+                    android:textColorHint="@color/color1"
+                    android:textSize="14dp" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
                 android:layout_width="match_parent"

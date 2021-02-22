@@ -60,6 +60,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:background="@color/Gris"
+                android:padding="16dp"
                 >
 
 
@@ -68,25 +70,25 @@
                     android:layout_height="wrap_content"
                     android:hint="Mail"
                     android:textColorHint="@color/color1"
-                    android:layout_margin="4dp"
                     android:layout_weight="1"
 
                     >
+
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editRequest"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:maxLines="1"
                         android:inputType="text"
-                        android:textColorHint="@color/color1"
+                        android:maxLines="1"
                         android:textColor="@color/colorNegro"
-                        android:textSize="14dp"
-                        />
+                        android:textColorHint="@color/color1"
+                        android:textSize="14dp" />
                 </com.google.android.material.textfield.TextInputLayout>
                 <Button
                     android:id="@+id/BtnRequest"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:backgroundTint="@color/cabecera"
 
                     android:text="Agregar" />
 

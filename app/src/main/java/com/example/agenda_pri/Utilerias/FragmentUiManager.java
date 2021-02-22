@@ -5,6 +5,7 @@ import android.content.Context;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.agenda_pri.R;
@@ -25,6 +26,19 @@ public class FragmentUiManager{
         this.FragSchedulle=FragSchedulle;
         this.FragProposed=FragProposed;
         this.FragPromises=FragPromises;
+    }
+
+    public  void reiniciar()
+    {
+        fragmentTransaction.remove(FragPromises);
+        fragmentTransaction.remove(FragSchedulle);
+        fragmentTransaction.remove(FragProposed);
+
+        FragSchedulle.onDestroy();
+        FragProposed.onDestroy();
+        FragPromises.onDestroy();
+
+
     }
 
     public void FragmentUiManager(String Windows) {
@@ -97,6 +111,10 @@ public class FragmentUiManager{
                 break;
         }
     }
+
+
+
+
 
 
 

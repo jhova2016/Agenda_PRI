@@ -110,11 +110,29 @@ public class SingUP extends AppCompatActivity {
             Evento.put("Admin",  true);
             Evento.put("Correo",  AuxCorreo);
 
+            Map<String, Object> Mail = new HashMap<>();
+            Mail.put("Mail",  AuxCorreo);
+
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             db.collection("Users").document(AuxCorreo).collection("Acceso").document(AuxCorreo)
 
             //db.collection("Acceso").document(mAuth.getUid())
                     .set(Evento)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d(TAG, "DocumentSnapshot successfully written!");
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w(TAG, "Error writing document", e);
+                        }
+                    });
+
+            db.collection("Users").document(AuxCorreo).collection("Solicitudes").document(AuxCorreo)
+                    .set(Mail)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {

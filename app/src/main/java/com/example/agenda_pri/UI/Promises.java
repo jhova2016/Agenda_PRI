@@ -105,6 +105,7 @@ public class Promises extends Fragment {
 
     TextView NoSeEncontraron;
 
+    FirebaseFirestore db;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -140,6 +141,10 @@ public class Promises extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+      db = FirebaseFirestore.getInstance();
+        sharedPreferences = getContext().getSharedPreferences("ADMINISTRADORES", MODE_PRIVATE);
+        mAuth = FirebaseAuth.getInstance();
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -179,15 +184,18 @@ public class Promises extends Fragment {
             @Override
             public void onClick(View v) {
 
-                NewPromised();
-                DialogNewPromised.show();
+                /*NewPromised();
+                DialogNewPromised.show();*/
+                DialogAddNewPromised();
+                DialogNewPromisedSelection.show();
 
 
             }
         });
+        String Aux=sharedPreferences.getString("SchedulleUser", mAuth.getCurrentUser().getEmail());
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference docRef = db.collection("Actualizar").document("BanderaNuevaPromesa");
+
+        DocumentReference docRef =db.collection("Users").document(Aux).collection("Actualizar").document("BanderaNuevaPromesa");
 
         docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
@@ -210,8 +218,9 @@ public class Promises extends Fragment {
         adapterPromises.notifyDataSetChanged();
         listaPromises.setAdapter(adapterPromises);
 
-        final FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("Promises")
+        String Aux=sharedPreferences.getString("SchedulleUser", mAuth.getCurrentUser().getEmail());
+        db.collection("Users").document(Aux).collection("Promises")
+        //db.collection("Promises")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -348,9 +357,10 @@ public class Promises extends Fragment {
         Save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-                DocumentReference washingtonRef = db.collection("Promises").document(ID);
+                String Aux=sharedPreferences.getString("SchedulleUser", mAuth.getCurrentUser().getEmail());
+
+                DocumentReference washingtonRef = db.collection("Users").document(Aux).collection("Promises").document(ID);
 
                 washingtonRef
                         .update("Promised",  Promised.getText().toString()
@@ -383,280 +393,26 @@ public class Promises extends Fragment {
 
     }
 
-    private void NewPromised()
-    {
-        android.app.AlertDialog.Builder builder=new android.app.AlertDialog.Builder(getContext()).setCancelable(false);
-        LayoutInflater inflater = getLayoutInflater();
-        View view = inflater.inflate(R.layout.dialog_past_even_promises,null);
-        BtnCancelNewPromised=view.findViewById(R.id.BtnCancelNewPromised);
 
-        RecyclerLastEvents = view.findViewById(R.id.recyclerLastEvents);
-        RecyclerLastEvents.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
 
-        RecyclerLastEvents("all");
 
 
-        BtnCancelNewPromised.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                DialogNewPromised.dismiss();
-            }
-        });
-
-
-
-        builder.setView(view);
-        DialogNewPromised=builder.create();
-        DialogNewPromised.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-    }
-
-
-    public void RecyclerLastEvents(final String DateFilter)
-    {
-
-        final FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference docRef = db.collection("Actualizar").document("Bandera");
-
-        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-
-
-                ListLastEvents.clear();
-
-                final FirebaseFirestore db = FirebaseFirestore.getInstance();
-                db.collection("Eventos")
-                        .get()
-                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-
-                            @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    for (QueryDocumentSnapshot document : task.getResult()) {
-                                        Log.d(TAG, document.getId() + " => " + document.getData());
-
-                                        SimpleDateFormat objSDFQuitar  = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-                                        if(document.get("EstadoDeEvento").toString().equals("Futuro"))
-                                        {
-
-                                            try {
-
-                                                Date dtEvento  = objSDFQuitar.parse( document.get("FechaDeEvento").toString()+" "+document.get("HoraFinal").toString());
-                                                Date date = new Date();
-                                                System.out.println("Hora y fecha actual: "+objSDFQuitar .format(date));
-                                                if (dtEvento.compareTo(date)<=0) {
-
-                                                    ListLastEvents.add(new Elemento_Evento(
-                                                            document.getId(),
-                                                            document.get("TipoDeEvento").toString(),
-                                                            document.get("Localidad").toString(),
-                                                            document.get("Lugar").toString(),
-                                                            document.get("Informacion").toString(),
-                                                            document.get("FechaDeEvento").toString(),
-                                                            "nada",
-                                                            document.get("HoraInicio").toString(),
-                                                            document.get("HoraFinal").toString(),
-                                                            document.get("Responsable").toString(),
-                                                            document.get("Vestimenta").toString(),
-                                                            document.get("EstadoDeEvento").toString(),
-                                                            document.get("CoordenadasActuales").toString(),
-                                                            document.get("CoordenadasEvento").toString(),
-                                                            document.get("FechaDeCalendarizacion").toString(),
-                                                            document.get("QuienCalendarizo").toString() ));
-                                                    //adapterAgenda.notifyDataSetChanged();
-
-
-
-
-
-
-                                                }
-                                                else
-                                                {
-                                                    System.out.println("ya paso");
-                                                }
-
-
-                                            } catch (ParseException e) {
-                                                e.printStackTrace();
-                                            }
-
-
-                                        }
-
-
-                                    }
-
-                                    SimpleDateFormat objSDF  = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-                                    for(int i = 0; i < ListLastEvents.size() - 1; i++)
-                                    {
-
-                                        for(int j = 0; j < ListLastEvents.size()  - 1; j++)
-                                        {
-                                            Date dt_1 = null;
-                                            Date dt_2 = null;
-                                            try {
-
-                                                dt_1 = objSDF.parse(ListLastEvents.get(j).getFechaDeEvento()+" "+ListLastEvents.get(j).getHoraInicio());
-                                                dt_2 = objSDF.parse(ListLastEvents.get(j+1).getFechaDeEvento()+" "+ListLastEvents.get(j+1).getHoraInicio());
-                                            } catch (ParseException e) {
-                                                e.printStackTrace();
-                                            }
-                                            //System.out.println("Date1:" + objSDF.format(dt_1));
-                                            //System.out.println("Date2:" + objSDF.format(dt_2));
-
-                                            if (dt_1.compareTo(dt_2)==-1) {
-
-                                                Elemento_Evento tmp=ListLastEvents.get(j+1);
-                                                ListLastEvents.set(j+1,ListLastEvents.get(j));
-                                                ListLastEvents.set(j,tmp);
-
-
-                                            }
-
-                                        }
-                                    }
-
-
-                                    //adapterAgenda.notifyDataSetChanged();
-                                    FillRecycler(DateFilter);
-
-                                } else {
-                                    Log.w(TAG, "Error getting documents.", task.getException());
-                                }
-                            }
-                        });
-
-
-            }
-        });
-
-
-    }
-
-
-
-    public void FillRecycler(String DateFilter)
-    {
-
-
-
-
-        LayoutProgressBar.setVisibility(View.VISIBLE);
-        final ArrayList<Elemento_Evento> FilterEvent;
-
-        if(DateFilter.equals("all"))
-        {
-            FilterEvent = ListLastEvents;
-        }
-        else
-        {
-            FilterEvent= new ArrayList<Elemento_Evento>();
-            int Aux=0;
-            for(int i = 0; i<ListLastEvents.size(); i++)
-            {
-                if(ListLastEvents.get(i).getFechaDeEvento().equals(DateFilter))
-                {
-                    FilterEvent.add(Aux,ListLastEvents.get(i));
-                }
-            }
-
-
-            SimpleDateFormat objSDF  = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-            for(int i = 0; i < FilterEvent.size() - 1; i++)
-            {
-
-                for(int j = 0; j < FilterEvent.size()  - 1; j++)
-                {
-                    Date dt_1 = null;
-                    Date dt_2 = null;
-                    try {
-
-                        dt_1 = objSDF.parse(FilterEvent.get(j).getFechaDeEvento()+" "+FilterEvent.get(j).getHoraInicio());
-                        dt_2 = objSDF.parse(FilterEvent.get(j+1).getFechaDeEvento()+" "+FilterEvent.get(j+1).getHoraInicio());
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                    //System.out.println("Date1:" + objSDF.format(dt_1));
-                    //System.out.println("Date2:" + objSDF.format(dt_2));
-
-                    if (dt_1.compareTo(dt_2)==1) {
-
-                        Elemento_Evento tmp=FilterEvent .get(j+1);
-                        FilterEvent.set(j+1,FilterEvent.get(j));
-                        FilterEvent.set(j,tmp);
-
-
-                    }
-
-                }
-            }
-
-
-        }
-
-
-
-        AdapterLastSchedulle = new AdapterSchedulleLitle(FilterEvent,getContext());
-        AdapterLastSchedulle.notifyDataSetChanged();
-        RecyclerLastEvents.setAdapter(AdapterLastSchedulle);
-        LayoutProgressBar.setVisibility(View.INVISIBLE);
-
-        AdapterLastSchedulle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-
-
-
-                sharedPreferences = getContext().getSharedPreferences("ADMINISTRADORES", MODE_PRIVATE);
-                if(sharedPreferences.getInt("ADMIN", 1)==1)
-                {
-
-                   DialogAddNewPromised(
-
-                            FilterEvent.get(RecyclerLastEvents.getChildAdapterPosition(v)).getLocalidad(),
-                            FilterEvent.get(RecyclerLastEvents.getChildAdapterPosition(v)).getLugar(),
-                            FilterEvent.get(RecyclerLastEvents.getChildAdapterPosition(v)).getInformacion(),
-                            FilterEvent.get(RecyclerLastEvents.getChildAdapterPosition(v)).getFechaDeEvento()
-
-                    );
-                 DialogNewPromisedSelection.show();
-
-
-                }
-
-
-
-            }
-        });
-
-
-    }
-
-    public void DialogAddNewPromised(final String location, final String place, final String information, final String eventDate)
+    public void DialogAddNewPromised()
     {
         android.app.AlertDialog.Builder builder=new android.app.AlertDialog.Builder(getContext()).setCancelable(false);
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_new_promised,null);
 
         final TextView Location=view.findViewById(R.id.Location);
-        TextView Place=view.findViewById(R.id.Place);
-        TextView Information=view.findViewById(R.id.Information);
-        TextView EventDate=view.findViewById(R.id.Date);
+        final EditText Place=view.findViewById(R.id.Place);
+        final EditText Information=view.findViewById(R.id.Information);
+        final EditText EventDate=view.findViewById(R.id.Date);
         final EditText EditTextPromised=view.findViewById(R.id.editTextPromised);
         Button   BtnCancelNewPromised=view.findViewById(R.id.BtnCancelDialogNewPromised);
         Button   BtnAcceptNewPromised=view.findViewById(R.id.BtnAcceptDialogPromised);
 
 
 
-        Location.setText(location);
-        Place.setText(place);
-        Information.setText(information);
-        EventDate.setText(eventDate);
 
         BtnAcceptNewPromised.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -666,16 +422,18 @@ public class Promises extends Fragment {
 
 
                 Map<String, Object> Promised = new HashMap<>();
-                Promised.put("Location",location);
-                Promised.put("Place",place);
-                Promised.put("Information",information);
-                Promised.put("EventDate",eventDate);
+                Promised.put("Location",Location.getText().toString());
+                Promised.put("Place",Place.getText().toString());
+                Promised.put("Information",Information.getText().toString());
+                Promised.put("EventDate",EventDate.getText().toString());
                 Promised.put("Promised",EditTextPromised.getText().toString());
                 Promised.put("PromisedEstate","Promise");
 
 
-                FirebaseFirestore db = FirebaseFirestore.getInstance();
-                db.collection("Promises")
+
+                String Aux=sharedPreferences.getString("SchedulleUser", mAuth.getCurrentUser().getEmail());
+
+                db.collection("Users").document(Aux).collection("Promises")
                         .add(Promised)
                         .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                             @Override
@@ -694,8 +452,10 @@ public class Promises extends Fragment {
                                 Map<String, Object> Hora = new HashMap<>();
                                 Hora.put("UltimaActualizacion",  objSDFQuitar .format(date));
 
-                                FirebaseFirestore db2 = FirebaseFirestore.getInstance();
-                                db2.collection("Actualizar").document("BanderaNuevaPromesa")
+
+                                String Aux=sharedPreferences.getString("SchedulleUser", mAuth.getCurrentUser().getEmail());
+
+                            db.collection("Users").document(Aux).collection("Actualizar").document("BanderaNuevaPromesa")
                                         .set(Hora)
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
@@ -768,8 +528,9 @@ public class Promises extends Fragment {
         BtnAceptar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FirebaseFirestore db = FirebaseFirestore.getInstance();
-                DocumentReference docRef = db.collection("Promises").document(EntId);
+                String Aux=sharedPreferences.getString("SchedulleUser", mAuth.getCurrentUser().getEmail());
+
+                DocumentReference docRef = db.collection("Users").document(Aux).collection("Promises").document(EntId);
                 docRef.delete();
 
                 SimpleDateFormat objSDFQuitar  = new SimpleDateFormat("HH:mm:ss");
@@ -778,8 +539,9 @@ public class Promises extends Fragment {
                 Map<String, Object> Hora = new HashMap<>();
                 Hora.put("UltimaActualizacion",  objSDFQuitar .format(date));
 
-                FirebaseFirestore db2 = FirebaseFirestore.getInstance();
-                db2.collection("Actualizar").document("BanderaNuevaPromesa")
+                db.collection("Users").document(Aux).collection("Actualizar").document("BanderaNuevaPromesa")
+
+               // db.collection("Actualizar").document("BanderaNuevaPromesa")
                         .set(Hora)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override

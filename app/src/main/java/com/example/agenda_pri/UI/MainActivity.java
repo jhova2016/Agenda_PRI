@@ -24,7 +24,9 @@ import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +38,8 @@ import com.example.agenda_pri.ServicioNuevoEvento;
 import com.example.agenda_pri.UI.Login.SingIN;
 import com.example.agenda_pri.Utilerias.FragmentUiManager;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -51,21 +55,20 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 import static android.content.ContentValues.TAG;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
 
     ImageView BtnOpciones;
-
     BottomNavigationView bottomNavigationView;
-
     private FirebaseAnalytics mFirebaseAnalytics;
 
-
     AlertDialog DialogOpciones;
-
     AlertDialog DialogPeticiones;
+    AlertDialog DialogChamgleMail;
 
 
     SharedPreferences sharedPreferences;
@@ -85,29 +88,38 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     RecyclerView RecyclerLastEvents;
     AdapterPeticiones AdapterLastSchedulle;
 
-    TextView Titulo = null;
+    AdapterMail Adaptermail;
 
+
+    FirebaseFirestore db;
+    LinearLayout BtnChamgleMail;
+
+    TextView TxtChamgleMail;
 
     private FragmentManager fragmentManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        db = FirebaseFirestore.getInstance();
         fragmentManager = getSupportFragmentManager();
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         FragSchedulle = new Principal();
         FragProposed = new Propuestos();
         FragPromises = new Promises() ;
         BtnOpciones=findViewById(R.id.ImageBtnOpciones);
-        Titulo=findViewById(R.id.Titulo);
+
         mAuth = FirebaseAuth.getInstance();
+        sharedPreferences = getSharedPreferences("ADMINISTRADORES", MODE_PRIVATE);
 
         fragmentUiManager=new FragmentUiManager(fragmentManager,FragSchedulle,FragProposed,FragPromises);
 
 
         fragmentUiManager.FragmentUiManager("Schedulle");
-        Titulo.setText("Agenda");
 
+        TxtChamgleMail= findViewById(R.id.Mail);
+        String Aux=sharedPreferences.getString("SchedulleUser", mAuth.getCurrentUser().getEmail());
+        TxtChamgleMail.setText(Aux);
 
 
         Identificador=findViewById(R.id.Identificador);
@@ -117,6 +129,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseAuth mAuth=FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
+
+
         Correo.setText(user.getEmail());
         db.collection("Users").document(mAuth.getUid()).collection("Acceso").document(mAuth.getUid())
         //DocumentReference docRef1 = db.collection("Acceso").document(mAuth.getUid());
@@ -168,12 +182,21 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             }
         });
 
+        BtnChamgleMail = findViewById(R.id.changeMail);
+        BtnChamgleMail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogChangleMail();
+                DialogChamgleMail.show();
+
+            }
+        });
+
 
 
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation_view);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
 
-        sharedPreferences = getSharedPreferences("ADMINISTRADORES", MODE_PRIVATE);
         if(sharedPreferences.getInt("ADMIN", 1)==1)
         {
             Identificador.setText("Administrador");
@@ -218,8 +241,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             @Override
             public void onClick(View v) {
 
-
-
+                sharedPreferences = getApplication().getSharedPreferences("ADMINISTRADORES", MODE_PRIVATE);
+                sharedPreferences.edit().clear().apply();
                 FirebaseAuth.getInstance().signOut();
                 Intent intent = new Intent(getApplicationContext(), SingIN.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -257,7 +280,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         RecyclerLastEvents.setLayoutManager(new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false));
 
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
-
 
         ListLastEvents.clear();
         final String Aux=mAuth.getCurrentUser().getEmail();
@@ -320,13 +342,13 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         switch (item.getItemId()) {
             case R.id.action_inicio:
-                Titulo.setText("Agenda");
+
                 fragmentUiManager.FragmentUiManager("Schedulle");
 
 
                 break;
             case R.id.action_posibles:
-                Titulo.setText("Propuestas");
+
                 fragmentUiManager.FragmentUiManager("Proposed");
 
 
@@ -337,7 +359,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 if(sharedPreferences.getInt("ADMIN", 1)==1)
                 {
                     fragmentUiManager.FragmentUiManager("Promised");
-                    Titulo.setText("Promesas");
+
 
                 }
                 else
@@ -352,6 +374,170 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         return true;
     }
+
+
+    public void DialogChangleMail()
+    {
+        final ArrayList<String> ListLastEvents = new ArrayList<String>();
+
+
+        android.app.AlertDialog.Builder builder=new android.app.AlertDialog.Builder(this).setCancelable(true);
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.dialog_changle_mail,null);
+
+        Button BtnRequest=view.findViewById(R.id.BtnRequest);
+        final EditText MailRequest=view.findViewById(R.id.editRequest);
+        RecyclerLastEvents = view.findViewById(R.id.recycler);
+        RecyclerLastEvents.setLayoutManager(new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false));
+
+        ListLastEvents.clear();
+        final String Aux=mAuth.getCurrentUser().getEmail();
+        db.collection("Users").document(Aux).collection("Solicitudes")
+                //db.collection("Eventos")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+
+                                ListLastEvents.add(document.get("Mail").toString() );
+
+                            }
+
+                            Adaptermail = new AdapterMail(ListLastEvents,getApplicationContext());
+                            Adaptermail.notifyDataSetChanged();
+                            RecyclerLastEvents.setAdapter(Adaptermail);
+
+                            Adaptermail.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+
+                                    sharedPreferences.edit().putString("SchedulleUser",ListLastEvents.get(RecyclerLastEvents.getChildAdapterPosition(v))).apply();
+                                    String Aux=sharedPreferences.getString("SchedulleUser", mAuth.getCurrentUser().getEmail());
+                                    db.collection("Users").document(Aux).collection("Acceso").document(mAuth.getCurrentUser().getEmail())
+                                            .get()
+                                            .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+
+                                                    sharedPreferences.edit().putString("Admin",task.getResult().get("Admin").toString()).apply();
+                                                    sharedPreferences.edit().putString("Aceptado",task.getResult().get("Aceptado").toString()).apply();
+
+                                                    Intent intent = getIntent();
+                                                    finish();
+                                                    startActivity(intent);
+
+
+                                                }
+                                            });
+                                    DialogChamgleMail.dismiss();
+
+
+
+                                }
+                            });
+
+
+
+                        } else {
+                            Log.w(TAG, "Error getting documents.", task.getException());
+                        }
+                    }
+                });
+
+
+
+
+
+        BtnRequest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String SolicitudPara=MailRequest.getText().toString();
+                if(!SolicitudPara.equals(""))
+                {
+                    SolicitudPara=SolicitudPara.toLowerCase();
+                    SolicitudPara=SolicitudPara.replace(" ","");
+                    final String finalSolicitudPara = SolicitudPara;
+
+
+                    DocumentReference docRef = db.collection("Users").document(finalSolicitudPara).collection("Acceso").document(finalSolicitudPara);
+
+                    docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot document = task.getResult();
+                                if (document.exists()) {
+
+                                    Map<String, Object> Evento = new HashMap<>();
+                                    Evento.put("Aceptado",  false);
+                                    Evento.put("Admin",  false);
+                                    Evento.put("Correo",  mAuth.getCurrentUser().getEmail());
+
+                                    final FirebaseFirestore db2 = FirebaseFirestore.getInstance();
+
+
+                                    // db.collection("Acceso").document(mAuth.getUid())
+                                    db2.collection("Users").document(finalSolicitudPara).collection("Acceso").document(mAuth.getCurrentUser().getEmail())
+                                            .set(Evento).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+
+                                            Toast.makeText(getApplicationContext(),"Si se añadio",Toast.LENGTH_LONG).show();
+                                        }
+                                    })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+
+                                                    Toast.makeText(getApplicationContext(),"Ocurrio un error",Toast.LENGTH_LONG).show();
+                                                }
+                                            });
+
+                                    Map<String, Object> Sol = new HashMap<>();
+                                    Sol.put("Mail", finalSolicitudPara);
+                                    db2.collection("Users").document(mAuth.getCurrentUser().getEmail()).collection("Solicitudes").document(finalSolicitudPara)
+                                            .set(Sol);
+
+
+
+                                } else {
+                                    Toast.makeText(getApplicationContext(),"No Existe Este Usuario",Toast.LENGTH_LONG).show();
+
+                                }
+                            } else {
+                                Log.d(TAG, "get failed with ", task.getException());
+                            }
+                        }
+                    });
+
+
+                }
+                else
+                {
+                    Toast.makeText(getApplicationContext(),"Ingrese dato",Toast.LENGTH_LONG).show();
+                }
+
+
+
+            }
+        });
+
+
+
+
+
+
+        builder.setView(view);
+        DialogChamgleMail=builder.create();
+        DialogChamgleMail.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+    }
+
 
 
 

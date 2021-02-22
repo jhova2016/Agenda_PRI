@@ -131,8 +131,8 @@ public class Principal extends Fragment {
     RecyclerView RecyclerLastEvents;
     AdapterMail AdapterLastSchedulle;
 
-    LinearLayout BtnChamgleMail;
-    TextView TxtChamgleMail;
+
+
     //end val of dialognewevent
 
     FirebaseFirestore db;
@@ -186,9 +186,26 @@ public class Principal extends Fragment {
 
     }
 
-    public void FillElements(String DatefilterDate)
+    public void FillElements(final String DatefilterDate)
     {
-        Recycler(DatefilterDate);
+
+        String Aux=sharedPreferences.getString("Aceptado", "false");
+        {
+            if(Aux.equals("true"))
+            {
+                Recycler(DatefilterDate);
+
+            }
+            else
+            {
+                Toast.makeText(getContext(),"No tiene los permisos",Toast.LENGTH_LONG).show();
+            }
+
+
+        }
+
+
+
         /*if(sharedPreferences.getInt("ADMIN", 1)==1)
         {
             //si es admin
@@ -231,8 +248,8 @@ public class Principal extends Fragment {
             @Override
             public void onClick(View v) {
 
-
-                DocumentReference washingtonRef = db.collection("Users").document(mAuth.getUid()).collection("Eventos").document(ID);
+                final String Aux=sharedPreferences.getString("SchedulleUser", mAuth.getCurrentUser().getEmail());
+                DocumentReference washingtonRef = db.collection("Users").document(Aux).collection("Eventos").document(ID);
 
                 washingtonRef
                         .update("TipoDeEvento",  TipoDeEventoEditarEvento,
@@ -257,13 +274,13 @@ public class Principal extends Fragment {
                                 Map<String, Object> Hora = new HashMap<>();
                                 Hora.put("UltimaActualizacion",  objSDFQuitar .format(date));
 
-
-                                db.collection("Actualizar").document("Bandera")
+                                db.collection("Users").document(Aux).collection("Actualizar").document("Bandera")
                                         .set(Hora)
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
                                                 Log.d(TAG, "DocumentSnapshot successfully written!");
+
                                             }
                                         })
                                         .addOnFailureListener(new OnFailureListener() {
@@ -274,7 +291,7 @@ public class Principal extends Fragment {
                                         });
 
 
-
+                                FillElements("all");
                                 Toast.makeText(getContext(), "Evento Editado", Toast.LENGTH_LONG).show();
 
 
@@ -589,6 +606,7 @@ public class Principal extends Fragment {
                                                                     Vestimenta.setText("");
 
 
+
                                                                 }
                                                             })
                                                             .addOnFailureListener(new OnFailureListener() {
@@ -699,7 +717,7 @@ public class Principal extends Fragment {
                                                                                 }
                                                                             });*/
 
-
+                                                                    FillElements("all");
                                                                     Toast.makeText(getContext(), "Evento agendado", Toast.LENGTH_LONG).show();
                                                                     Localidad.setText("");
                                                                     Lugar.setText("");
@@ -1679,8 +1697,7 @@ public class Principal extends Fragment {
 
             }
         });
-        final String Aux=sharedPreferences.getString("SchedulleUser", mAuth.getCurrentUser().getEmail());
-        TxtChamgleMail.setText(Aux);
+
 
 
     }
@@ -1708,19 +1725,6 @@ public class Principal extends Fragment {
 
         listaEventos = view.findViewById(R.id.recycler);
         listaEventos.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
-        BtnChamgleMail = view.findViewById(R.id.changeMail);
-        TxtChamgleMail= view.findViewById(R.id.Mail);
-
-        final String Aux=sharedPreferences.getString("SchedulleUser", mAuth.getCurrentUser().getEmail());
-        TxtChamgleMail.setText(Aux);
-
-        BtnChamgleMail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DialogChangleMail();
-                DialogChamgleMail.show();
-            }
-        });
 
 
 
@@ -1771,28 +1775,23 @@ public class Principal extends Fragment {
         BotonFlotante.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String Aux=sharedPreferences.getString("SchedulleUser", mAuth.getCurrentUser().getEmail());
-                db.collection("Users").document(Aux).collection("Acceso").document(mAuth.getCurrentUser().getEmail())
-                        .get()
-                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                if(task.getResult().get("Admin").toString().equals("true"))
-                                {
-                                    NewEvent();
-                                    DialogNewEvent.show();
-
-                                }
-                                else
-                                {
-                                    Toast.makeText(getContext(),"No tiene los permisos",Toast.LENGTH_LONG).show();
-                                }
 
 
+                String Aux=sharedPreferences.getString("Admin", "false");
+                {
+                    if(Aux.equals("true"))
+                    {
+                        NewEvent();
+                        DialogNewEvent.show();
 
-                            }
-                        });
+                    }
+                    else
+                    {
+                        Toast.makeText(getContext(),"No tiene los permisos",Toast.LENGTH_LONG).show();
+                    }
 
+
+                }
 
 
             }
@@ -1806,141 +1805,6 @@ public class Principal extends Fragment {
 
 
 
-    public void DialogChangleMail()
-    {
-
-        android.app.AlertDialog.Builder builder=new android.app.AlertDialog.Builder(getContext()).setCancelable(true);
-        LayoutInflater inflater = getLayoutInflater();
-        View view = inflater.inflate(R.layout.dialog_changle_mail,null);
-
-        Button BtnRequest=view.findViewById(R.id.BtnRequest);
-        final EditText MailRequest=view.findViewById(R.id.editRequest);
-        RecyclerLastEvents = view.findViewById(R.id.recycler);
-        RecyclerLastEvents.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
-
-                ListLastEvents.clear();
-                final String Aux=mAuth.getCurrentUser().getEmail();
-                db.collection("Users").document(Aux).collection("Solicitudes")
-                //db.collection("Eventos")
-                        .get()
-                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-
-                            @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    for (QueryDocumentSnapshot document : task.getResult()) {
-
-                                        ListLastEvents.add(document.get("Mail").toString() );
-
-                                    }
-
-                                    AdapterLastSchedulle = new AdapterMail(ListLastEvents,getContext());
-                                    AdapterLastSchedulle.notifyDataSetChanged();
-                                    RecyclerLastEvents.setAdapter(AdapterLastSchedulle);
-
-                                    AdapterLastSchedulle.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-
-                                            sharedPreferences.edit().putString("SchedulleUser",ListLastEvents.get(RecyclerLastEvents.getChildAdapterPosition(v))).apply();
-
-                                            FillElements("all");
-                                            DialogChamgleMail.dismiss();
-
-
-
-                                        }
-                                    });
-
-
-
-                                } else {
-                                    Log.w(TAG, "Error getting documents.", task.getException());
-                                }
-                            }
-                        });
-
-
-
-
-
-        BtnRequest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                String SolicitudPara=MailRequest.getText().toString();
-
-                SolicitudPara=SolicitudPara.toLowerCase();
-                SolicitudPara=SolicitudPara.replace(" ","");
-                final String finalSolicitudPara = SolicitudPara;
-
-                Toast.makeText(getContext(),finalSolicitudPara,Toast.LENGTH_LONG).show();
-                DocumentReference docRef = db.collection("Users").document(finalSolicitudPara).collection("Acceso").document(finalSolicitudPara);
-
-                docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document.exists()) {
-                                Toast.makeText(getContext(),"SI Existe Este Usuario",Toast.LENGTH_LONG).show();
-                                Map<String, Object> Evento = new HashMap<>();
-                                Evento.put("Aceptado",  false);
-                                Evento.put("Admin",  false);
-                                Evento.put("Correo",  mAuth.getCurrentUser().getEmail());
-
-                                final FirebaseFirestore db2 = FirebaseFirestore.getInstance();
-
-
-                                // db.collection("Acceso").document(mAuth.getUid())
-                                db2.collection("Users").document(finalSolicitudPara).collection("Acceso").document(mAuth.getCurrentUser().getEmail())
-                                        .set(Evento).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-
-                                        Toast.makeText(getContext(),"Si se añadio",Toast.LENGTH_LONG).show();
-                                    }
-                                })
-                                        .addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-
-                                                Toast.makeText(getContext(),"Ocurrio un error",Toast.LENGTH_LONG).show();
-                                            }
-                                        });
-
-                                Map<String, Object> Sol = new HashMap<>();
-                                Sol.put("Mail", finalSolicitudPara);
-                                db2.collection("Users").document(mAuth.getCurrentUser().getEmail()).collection("Solicitudes").document(finalSolicitudPara)
-                                        .set(Sol);
-
-
-
-                            } else {
-                                    Toast.makeText(getContext(),"No Existe Este Usuario",Toast.LENGTH_LONG).show();
-
-                            }
-                        } else {
-                            Log.d(TAG, "get failed with ", task.getException());
-                        }
-                    }
-                });
-
-
-            }
-        });
-
-
-
-
-
-
-        builder.setView(view);
-        DialogChamgleMail=builder.create();
-        DialogChamgleMail.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-    }
 
 
 
