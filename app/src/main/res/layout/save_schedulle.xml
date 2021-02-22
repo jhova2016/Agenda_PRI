@@ -70,7 +70,7 @@
             android:orientation="vertical"
             android:layout_weight="1"
             android:gravity="center"
-            android:background="@color/ColorSchedulle"
+            android:background="@color/ColorPublic"
             >
             <LinearLayout
                 android:layout_width="match_parent"

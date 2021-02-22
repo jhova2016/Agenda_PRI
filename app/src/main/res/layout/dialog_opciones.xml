@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:textColor="@color/colorBlanco"
-            android:text="versión 1.3.0"
+            android:text="versión 2.5.2"
             android:textSize="5dp" />
 
         <ImageView

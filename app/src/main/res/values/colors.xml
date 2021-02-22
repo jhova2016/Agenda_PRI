@@ -25,8 +25,26 @@
     <color name="pie2">#FD4750</color>
     <color name="hint">#6E6E6E</color>
 
-    <color name="ColorSchedulle">#D97904</color>
-    <color name="ColorSchedulleComplement">#FFB01F</color>
+    <color name="ColorPublic">#D97904</color>
+    <color name="ColorPublicComplement">#F29F05</color>
+
+    <color name="ColorPrivate">#4F7302</color>
+    <color name="ColorPrivateComplement">#6A9903</color>
+
+    <color name="ColorTentador">#012E40</color>
+    <color name="ColorTentadorComplement">#1EA4D9</color>
+
+    <color name="ColorPublic2">#FDCD94</color>
+    <color name="ColorPublicComplement2">#FFECC9</color>
+
+    <color name="ColorPrivate2">#ABC573</color>
+    <color name="ColorPrivateComplement2">#DAEFAE</color>
+
+    <color name="ColorTentador2">#273F49</color>
+    <color name="ColorTentadorComplement2">#85C4DD</color>
+
+
+
     <color name="ColorProposed">#404040</color>
     <color name="ColorPromises">#009EAB</color>
 

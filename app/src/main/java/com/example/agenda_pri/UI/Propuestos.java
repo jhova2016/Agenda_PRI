@@ -208,8 +208,9 @@ public class Propuestos extends Fragment {
             @Override
             public void onClick(View v) {
 
+                final String Aux=sharedPreferences.getString("SchedulleUser", mAuth.getCurrentUser().getEmail());
+                DocumentReference washingtonRef = db.collection("Users").document(Aux).collection("Eventos").document(ID);
 
-                DocumentReference washingtonRef = db.collection("Users").document(mAuth.getUid()).collection("Eventos").document(ID);
 
                 washingtonRef
                         .update("TipoDeEvento",  TipoDeEventoEditarEvento,
@@ -234,7 +235,9 @@ public class Propuestos extends Fragment {
                                 Map<String, Object> Hora = new HashMap<>();
                                 Hora.put("UltimaActualizacion",  objSDFQuitar .format(date));
 
-                                db.collection("Users").document(mAuth.getUid()).collection("Actualizar").document("Bandera")
+
+
+                                db.collection("Users").document(Aux).collection("Actualizar").document("Bandera")
                                 //db.collection("Actualizar").document("Bandera")
                                         .set(Hora)
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -319,8 +322,7 @@ public class Propuestos extends Fragment {
                 Map<String, Object> Hora = new HashMap<>();
                 Hora.put("UltimaActualizacion",  objSDFQuitar .format(date));
 
-                FirebaseFirestore db2 = FirebaseFirestore.getInstance();
-                db2.collection("Actualizar").document("Bandera")
+                db.collection("Users").document(Aux).collection("Actualizar").document("Bandera")
                         .set(Hora)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
@@ -649,8 +651,8 @@ public class Propuestos extends Fragment {
 
 
 
-        BtnAceptarEditarEventoDialog =view.findViewById(R.id.BtnGuardarEditarEvento);
-        BtnCancelarEditarEventoDialog =view.findViewById(R.id.BtnCancelarEditarEvento);
+        BtnAceptarEditarEventoDialog =view.findViewById(R.id.BtnGuardarEvento);
+        BtnCancelarEditarEventoDialog =view.findViewById(R.id.BtnCancelarGuardarEvento);
 
 
 
@@ -915,7 +917,7 @@ public class Propuestos extends Fragment {
     {
         android.app.AlertDialog.Builder builder=new android.app.AlertDialog.Builder(getContext()).setCancelable(false);
         LayoutInflater inflater = getLayoutInflater();
-        View view = inflater.inflate(R.layout.fragment_proponer_evento,null);
+        View view = inflater.inflate(R.layout.fragment_agregar_evento,null);
 
         final ArrayList<String> listSpinner =new ArrayList<String>();
         final ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),R.layout.controlspinner, listSpinner);

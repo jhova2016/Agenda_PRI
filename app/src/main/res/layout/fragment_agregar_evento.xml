@@ -22,7 +22,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Agendar nuevo evento"
+            android:text="Nuevo "
             android:textColor="@color/colorPrimaryDark"
             android:textSize="20dp"
             android:layout_margin="12dp"
@@ -404,6 +404,7 @@
             app:cardCornerRadius="6dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
+            android:layout_marginBottom="8dp"
             android:layout_weight="1"
             app:cardBackgroundColor="@color/colorGris"
             app:cardElevation="0dp"
@@ -438,11 +439,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_margin="16dp"
             android:weightSum="2"
             android:layout_weight="1"
-            android:gravity="center"
-
+            android:gravity="right"
+            android:background="@color/Gris"
 
             >
 
@@ -450,10 +450,11 @@
                 android:id="@+id/BtnCancelarGuardarEvento"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:text="Cancelar"
                 android:backgroundTint="@color/colorBlanco"
                 android:textColor="@color/color2"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
 
 
                 />
@@ -462,10 +463,12 @@
                 android:id="@+id/BtnGuardarEvento"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:text="Guardar"
                 android:backgroundTint="@color/color2"
                 android:textColor="@color/colorBlanco"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginRight="16dp"
 
 
                 />

@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -131,7 +132,7 @@ public class Principal extends Fragment {
     RecyclerView RecyclerLastEvents;
     AdapterMail AdapterLastSchedulle;
 
-
+    SwipeRefreshLayout swipeRefreshLayout;
 
     //end val of dialognewevent
 
@@ -346,8 +347,23 @@ public class Principal extends Fragment {
             @Override
             public void onClick(View v) {
 
-                DocumentReference docRef = db.collection("Users").document(mAuth.getUid()).collection("Eventos").document(EntId);
-                docRef.delete();
+                final String Aux=sharedPreferences.getString("SchedulleUser", mAuth.getCurrentUser().getEmail());
+
+                DocumentReference docRef  = db.collection("Users").document(Aux).collection("Eventos").document(EntId);
+                docRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+
+                        FillElements("all");
+
+                    }
+                })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w(TAG, "Error deleting document", e);
+                            }
+                        });
 
                 SimpleDateFormat objSDFQuitar  = new SimpleDateFormat("HH:mm:ss");
                 Date date = new Date();
@@ -356,7 +372,7 @@ public class Principal extends Fragment {
                 Hora.put("UltimaActualizacion",  objSDFQuitar .format(date));
 
 
-                db.collection("Actualizar").document("Bandera")
+                db.collection("Users").document(Aux).collection("Actualizar").document("Bandera")
                         .set(Hora)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
@@ -546,7 +562,7 @@ public class Principal extends Fragment {
                                                                 public void onSuccess(DocumentReference documentReference) {
                                                                     Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
 
-
+                                                                    DialogNewEvent.dismiss();
 
                                                                     SimpleDateFormat objSDFQuitar  = new SimpleDateFormat("HH:mm:ss");
                                                                     Date date = new Date();
@@ -716,7 +732,7 @@ public class Principal extends Fragment {
                                                                                     Log.w(TAG, "Error writing document", e);
                                                                                 }
                                                                             });*/
-
+                                                                    DialogNewEvent.dismiss();
                                                                     FillElements("all");
                                                                     Toast.makeText(getContext(), "Evento agendado", Toast.LENGTH_LONG).show();
                                                                     Localidad.setText("");
@@ -1124,8 +1140,8 @@ public class Principal extends Fragment {
 
 
 
-        BtnAceptarEditarEventoDialog =view.findViewById(R.id.BtnGuardarEditarEvento);
-        BtnCancelarEditarEventoDialog =view.findViewById(R.id.BtnCancelarEditarEvento);
+        BtnAceptarEditarEventoDialog =view.findViewById(R.id.BtnGuardarEvento);
+        BtnCancelarEditarEventoDialog =view.findViewById(R.id.BtnCancelarGuardarEvento);
 
 
 
@@ -1601,6 +1617,9 @@ public class Principal extends Fragment {
 
     public void FillRecycler(String DateFilter)
     {
+
+        swipeRefreshLayout.setRefreshing(false);
+
         LayoutProgressBar.setVisibility(View.VISIBLE);
         final ArrayList<Elemento_Evento> FilterEvent;
 
@@ -1649,6 +1668,7 @@ public class Principal extends Fragment {
                     }
 
                 }
+
             }
 
 
@@ -1725,6 +1745,16 @@ public class Principal extends Fragment {
 
         listaEventos = view.findViewById(R.id.recycler);
         listaEventos.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
+
+
+        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                FillElements("all");
+            }
+        });
 
 
 

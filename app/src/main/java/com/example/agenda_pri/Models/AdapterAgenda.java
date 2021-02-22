@@ -196,18 +196,19 @@ public class AdapterAgenda  extends RecyclerView.Adapter<AdapterAgenda.ViewHolde
             {
 
                 case "Publico":
-                    holder.ColorTarjetaCabecera.setBackgroundColor(Color.parseColor("#D97904"));
-                    holder.ColorTarjeta.setBackgroundColor(Color.parseColor("#F29F05"));
+
+                    holder.ColorTarjetaCabecera.setBackgroundResource(R.color.ColorPublic);
+                    holder.ColorTarjeta.setBackgroundResource(R.color.ColorPublicComplement);
                     break;
 
                 case "Privado":
-                    holder.ColorTarjetaCabecera.setBackgroundColor(Color.parseColor("#4F7302"));
-                    holder.ColorTarjeta.setBackgroundColor(Color.parseColor("#6A9903"));
+                    holder.ColorTarjetaCabecera.setBackgroundResource(R.color.ColorPrivate);
+                    holder.ColorTarjeta.setBackgroundResource(R.color.ColorPrivateComplement);
                     break;
 
                 case "Tentador":
-                    holder.ColorTarjetaCabecera.setBackgroundColor(Color.parseColor("#012E40"));
-                    holder.ColorTarjeta.setBackgroundColor(Color.parseColor("#1EA4D9"));
+                    holder.ColorTarjetaCabecera.setBackgroundResource(R.color.ColorTentador);
+                    holder.ColorTarjeta.setBackgroundResource(R.color.ColorTentadorComplement);
                     break;
             }
 
@@ -219,18 +220,19 @@ public class AdapterAgenda  extends RecyclerView.Adapter<AdapterAgenda.ViewHolde
             {
 
                 case "Publico":
-                    holder.ColorTarjetaCabecera.setBackgroundColor(Color.parseColor("#2FD97904"));
-                    holder.ColorTarjeta.setBackgroundColor(Color.parseColor("#1FF29F05"));
+
+                    holder.ColorTarjetaCabecera.setBackgroundResource(R.color.ColorPublic2);
+                    holder.ColorTarjeta.setBackgroundResource(R.color.ColorPublicComplement2);
                     break;
 
                 case "Privado":
-                    holder.ColorTarjetaCabecera.setBackgroundColor(Color.parseColor("#2F618C03"));
-                    holder.ColorTarjeta.setBackgroundColor(Color.parseColor("#1FABD904"));
+                    holder.ColorTarjetaCabecera.setBackgroundResource(R.color.ColorPrivate2);
+                    holder.ColorTarjeta.setBackgroundResource(R.color.ColorPrivateComplement2);
                     break;
 
                 case "Tentador":
-                    holder.ColorTarjetaCabecera.setBackgroundColor(Color.parseColor("#2F012E40"));
-                    holder.ColorTarjeta.setBackgroundColor(Color.parseColor("#1F1EA4D9"));
+                    holder.ColorTarjetaCabecera.setBackgroundResource(R.color.ColorTentador2);
+                    holder.ColorTarjeta.setBackgroundResource(R.color.ColorTentadorComplement2);
                     break;
             }
 
