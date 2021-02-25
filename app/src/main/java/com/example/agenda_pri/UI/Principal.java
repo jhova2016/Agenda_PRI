@@ -1,5 +1,6 @@
 package com.example.agenda_pri.UI;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -73,15 +74,16 @@ public class Principal extends Fragment {
     RecyclerView listaEventos;
     AdapterAgenda adapterAgenda;
 
-    ArrayList<String> ListLastEvents = new ArrayList<String>();
+    ArrayList<String> ListLastEvents = new ArrayList<>();
 
-    final ArrayList<Elemento_Evento> Evento = new ArrayList<Elemento_Evento>();
+    final ArrayList<Elemento_Evento> Evento = new ArrayList<>();
     AlertDialog DialogEvento;
     AlertDialog DialogEliminarEvento;
     AlertDialog DialogEditarEventoFuncion;
     AlertDialog DialogAceptarEditar;
     AlertDialog DialogNewEvent;
     AlertDialog DialogChamgleMail;
+
 
     AlertDialog  Dialog_save_Schedulle;
 
@@ -220,6 +222,7 @@ public class Principal extends Fragment {
 
     }
 
+    @SuppressLint("SetTextI18n")
     private void DialogAceptarEditarEvento(final String ID,
                                            final String EntTipoDeEvento,
                                            final String EntLocalidad,
@@ -355,6 +358,8 @@ public class Principal extends Fragment {
                     public void onSuccess(Void aVoid) {
 
                         FillElements("all");
+                        DialogEliminarEvento.dismiss();
+                        DialogEvento.dismiss();
 
                     }
                 })
@@ -362,30 +367,6 @@ public class Principal extends Fragment {
                             @Override
                             public void onFailure(@NonNull Exception e) {
                                 Log.w(TAG, "Error deleting document", e);
-                            }
-                        });
-
-                SimpleDateFormat objSDFQuitar  = new SimpleDateFormat("HH:mm:ss");
-                Date date = new Date();
-
-                Map<String, Object> Hora = new HashMap<>();
-                Hora.put("UltimaActualizacion",  objSDFQuitar .format(date));
-
-
-                db.collection("Users").document(Aux).collection("Actualizar").document("Bandera")
-                        .set(Hora)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Log.d(TAG, "DocumentSnapshot successfully written!");
-                                DialogEliminarEvento.dismiss();
-                                DialogEvento.dismiss();
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.w(TAG, "Error writing document", e);
                             }
                         });
 
